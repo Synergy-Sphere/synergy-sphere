@@ -5,8 +5,8 @@ import { useRegisterContext } from "../contexts/registerContext/RegisterContext"
 
 function useSignup() {
   const [loading, setLoading] = useState(false);
-  const { signupInfo, registerDispatch, REGISTER_TYPES } = useRegisterContext();
-  // const { fullName, username, email, password, confirmPassword } = signupInfo;
+  const {  registerDispatch, REGISTER_TYPES } = useRegisterContext();
+  
 
   async function signingUp({
     fullName,
@@ -39,7 +39,7 @@ function useSignup() {
           "Content-Type": "Application/json",
         },
       };
-      const response = await fetch("", settings);
+      const response = await fetch("http://localhost:5555/register", settings);
       if (response.ok) {
         const data = await response.json();
         registerDispatch({

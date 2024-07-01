@@ -23,6 +23,7 @@ export const registerInitialState = {
     password: "",
     confirmPassword: "",
   },
+  
   loginInfo: { email: "", password: "" },
 
   loggedInUser: null,

@@ -7,6 +7,8 @@ import {
 } from "./registerReducer";
 
 const RegisterContext = createContext(null);
+
+
 export function useRegisterContext() {
   return useContext(RegisterContext);
 }
