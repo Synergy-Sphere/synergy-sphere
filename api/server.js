@@ -3,6 +3,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import globalErrorHandler from "./middleware/globalErrorHandler.js";
+import registerRouter from "./routes/register.route.js";
+
+
+
 
 await connect();
 
@@ -13,7 +17,10 @@ app.use(cookieParser());
 app.use(express.json());
 
 
-// Routes
+
+app.use("/register" , registerRouter);
+
+//app.use("/login", loginRouter);
 
 
 const port = process.env.PORT || 5555;

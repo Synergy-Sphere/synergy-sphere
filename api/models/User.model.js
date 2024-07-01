@@ -11,6 +11,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique:true
     },
     password: {
       type: String,
@@ -22,22 +23,18 @@ const userSchema = new Schema(
     },
     profilePic: {
       type: String,
-      required: true,
       default: "",
     },
     location: {
       type: String,
-      required: true,
       default: "",
     },
     bio: {
       type: String,
-      required: true,
       default: "",
     },
     friendList: {
       type: Array, // we push userIds to it
-      required: true,
       default: [],
     },
     interests: {
@@ -114,7 +111,6 @@ const userSchema = new Schema(
           "Woodworking",
         ],
       },
-      required: true,
       default: "", // "?"
     },
     posts: {
@@ -125,7 +121,6 @@ const userSchema = new Schema(
           ref: "Post",
         },
       ],
-      required: true,
       default: [],
     },
     events: {
@@ -136,7 +131,6 @@ const userSchema = new Schema(
           ref: "Event",
         },
       ],
-      required: true,
       default: [],
     },
   },
