@@ -7,6 +7,7 @@ import registerRouter from "./routes/register.route.js";
 
 import createProfileRouter from "./routes/createProfile.route.js";
 
+
 await connect();
 
 const app = express();
