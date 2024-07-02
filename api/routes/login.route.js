@@ -1,10 +1,10 @@
 import express from "express";
-import { checkInputs } from "../middleware/checkInputs.js";
-import { postLogin } from "../controllers/loginController.js";
+import checkValues from "../validators/checkValues.validator.js";
+import { login } from "../controllers/login.controller.js";
 
 const router = express.Router();
 
 
-router.post("/", checkInputs, postLogin);
+router.post("/", checkValues(["email", "password"]), login);
 
 export default router;
