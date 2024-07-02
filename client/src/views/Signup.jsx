@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 
 import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
-import useSignup from "../hooks/useSignup";
+
+
+// import useSignup from "../hooks/useSignup";
+
+import { useSignup } from "../hooks";
 
 function Signup() {
   const { signupInfo, registerDispatch, REGISTER_TYPES } = useRegisterContext();
