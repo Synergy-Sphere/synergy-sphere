@@ -1,6 +1,15 @@
-import User from "../models/User.model.js";
+// export const updateBio = (req,res,next) => {
+//     // updateBio
+// }
 
-export const createProfile = (req,res,next) => {
-    // creating profile
-    
-}
+// export const updateProfilePicture = (req,res,next) => {
+//     // updateProfilePicture
+// }
+
+// export const updateCoverPicture = (req,res,next) => {
+//     // updateCoverPicture
+// }
+
+// export const updateLocation = (req,res,next) => {
+//     // updateLocation
+// }
