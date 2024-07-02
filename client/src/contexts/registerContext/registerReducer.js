@@ -1,12 +1,12 @@
 export const REGISTER_TYPES = {
   SIGNUP_FULL_NAME_INPUT: "fullName",
   SIGNUP_USER_NAME_INPUT: "username",
-  SIGNUP_EMAIL_INPUT: "email",
-  SIGNUP_PASSWORD_INPUT: "password",
+  SIGNUP_EMAIL_INPUT: "sign-email",
+  SIGNUP_PASSWORD_INPUT: "sign-password",
   SIGNUP_CONFIRM_PASSWORD_INPUT: "confirm-password",
 
-  LOGIN_EMAIL_INPUT: "email",
-  LOGIN_PASSWORD_INPUT: "password",
+  LOGIN_EMAIL_INPUT: "login-email",
+  LOGIN_PASSWORD_INPUT: "login-password",
 
   HANDLE_SIGNING_UP: "handle-signing-up",
 
@@ -23,7 +23,7 @@ export const registerInitialState = {
     password: "",
     confirmPassword: "",
   },
-  
+
   loginInfo: { email: "", password: "" },
 
   loggedInUser: null,
@@ -82,14 +82,7 @@ export function registerReducer(registerState, { type, payload }) {
       };
     }
 
-    // * Handle Signup
-    case REGISTER_TYPES.HANDLE_SIGNING_UP: {
-    }
-
-    // * Handle Login
-    case REGISTER_TYPES.HANDLE_LOGGING_IN: {
-    }
-
+    // * Signing up / Logging in
     case REGISTER_TYPES.ASSIGN_LOGGED_IN_USER: {
       return {
         signupInfo: {

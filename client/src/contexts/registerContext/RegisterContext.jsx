@@ -8,7 +8,6 @@ import {
 
 const RegisterContext = createContext(null);
 
-
 export function useRegisterContext() {
   return useContext(RegisterContext);
 }
@@ -19,9 +18,13 @@ function RegisterContextProvider({ children }) {
     registerInitialState
   );
 
-  const { signupInfo, loginInfo } = registerState;
+  const { signupInfo, loginInfo, loggedInUser } = registerState;
+
+  console.log(loggedInUser);
   return (
-    <RegisterContext.Provider value={{ signupInfo, loginInfo, registerDispatch, REGISTER_TYPES }}>
+    <RegisterContext.Provider
+      value={{ signupInfo, loginInfo, registerDispatch, REGISTER_TYPES }}
+    >
       {children}
     </RegisterContext.Provider>
   );
