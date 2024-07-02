@@ -9,7 +9,6 @@ function Login() {
 
   const { email, password } = loginInfo;
 
-  console.log(email);
 
   const { LOGIN_EMAIL_INPUT, LOGIN_PASSWORD_INPUT } = REGISTER_TYPES;
 
@@ -20,6 +19,8 @@ function Login() {
 
     await loggingIn({ email, password });
   }
+
+
   return (
     <>
       <div className="w-[80%] mx-auto my-20">
