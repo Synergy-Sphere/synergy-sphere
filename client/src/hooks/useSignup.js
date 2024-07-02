@@ -23,6 +23,7 @@ function useSignup() {
       confirmPassword,
     });
     if (!valid) return;
+    
     setLoading(true);
 
     try {
