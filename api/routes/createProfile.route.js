@@ -1,12 +1,13 @@
-// import { Router } from "express";
-// import { createProfile } from "../controllers/createProfile.controller.js";
+import { Router } from "express";
+import {updateProfilePicture,updateBio,updateCoverPicture,updateLocation } from "../controllers/createProfile.controller.js";
+import authenticateToken from "../middleware/authenticateToken.js";
 
-// const router = Router();
+const router = Router();
 
-// router.patch("/profilePicture", updateProfilePicture);
-// router.patch("/bio", updateBio);
-// router.patch("/coverPicture", updateCoverPicture);
-// router.patch("/location", updateLocation);
+router.patch("/:id/profilePicture", authenticateToken, updateProfilePicture);
+router.patch("/:id/bio", authenticateToken, updateBio);
+router.patch("/:id/coverPicture", authenticateToken, updateCoverPicture);
+router.patch("/:id/location", authenticateToken, updateLocation);
 
 
-// export default router;
+export default router;

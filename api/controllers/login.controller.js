@@ -32,7 +32,7 @@ export const login = async (req, res, next) => {
 
   const cookieOptions = {
     httpOnly: true,
-    secure: true,
+    // secure: true, // uncomment when it will be ready for production mode
     sameSite: "Strict",
   };
 
