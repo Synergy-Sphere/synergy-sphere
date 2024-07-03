@@ -40,7 +40,7 @@ function useSignup() {
           "Content-Type": "Application/json",
         },
       };
-      const response = await fetch("http://localhost:5555/register", settings);
+      const response = await fetch("http://localhost:5555/signup", settings);
       if (response.ok) {
         const data = await response.json();
         registerDispatch({
