@@ -25,6 +25,7 @@ function useLogin() {
         headers: {
           "Content-Type": "Application/json",
         },
+        credentials: "include",
       };
 
       const response = await fetch("http://localhost:5555/login", settings);
@@ -34,6 +35,10 @@ function useLogin() {
           type: REGISTER_TYPES.ASSIGN_LOGGED_IN_USER,
           payload: data,
         });
+      } else {
+        const { error } = await response.json();
+        console.log(error);
+        throw new Error(error.message);
       }
     } catch (error) {
       toast.error(error.message);
