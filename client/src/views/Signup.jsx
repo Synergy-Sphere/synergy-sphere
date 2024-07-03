@@ -1,14 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
-
 
 // import useSignup from "../hooks/useSignup";
 
 import { useSignup } from "../hooks";
 
 function Signup() {
-  const { signupInfo, registerDispatch, REGISTER_TYPES } = useRegisterContext();
+  const { signupInfo, loggedInUser, registerDispatch, REGISTER_TYPES } =
+    useRegisterContext();
 
   const { fullName, username, email, password, confirmPassword } = signupInfo;
 
@@ -22,9 +22,12 @@ function Signup() {
 
   const { loading, signingUp } = useSignup();
 
+  const nav = useNavigate();
+
   async function handleSignup(e) {
     e.preventDefault();
     await signingUp({ fullName, username, email, password, confirmPassword });
+    loggedInUser && nav(`/${loggedInUser.id}/customize-profile`);
   }
   return (
     <>

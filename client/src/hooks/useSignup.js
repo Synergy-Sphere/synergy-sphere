@@ -39,14 +39,18 @@ function useSignup() {
         headers: {
           "Content-Type": "Application/json",
         },
+        credentials: "include",
       };
-      const response = await fetch("http://localhost:5555/register", settings);
+      const response = await fetch("http://localhost:5555/signup", settings);
       if (response.ok) {
         const data = await response.json();
         registerDispatch({
           type: REGISTER_TYPES.ASSIGN_LOGGED_IN_USER,
           payload: data,
         });
+      }else {
+        const { error } = await response.json()
+        throw new Error(error.message)
       }
     } catch (error) {
       toast.error(error.message);
