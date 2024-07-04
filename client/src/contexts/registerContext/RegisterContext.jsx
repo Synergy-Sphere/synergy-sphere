@@ -23,7 +23,13 @@ function RegisterContextProvider({ children }) {
   console.log(loggedInUser);
   return (
     <RegisterContext.Provider
-      value={{ signupInfo, loginInfo, registerDispatch, REGISTER_TYPES }}
+      value={{
+        signupInfo,
+        loginInfo,
+        loggedInUser,
+        registerDispatch,
+        REGISTER_TYPES,
+      }}
     >
       {children}
     </RegisterContext.Provider>

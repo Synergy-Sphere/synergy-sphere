@@ -9,7 +9,6 @@ function Login() {
 
   const { email, password } = loginInfo;
 
-
   const { LOGIN_EMAIL_INPUT, LOGIN_PASSWORD_INPUT } = REGISTER_TYPES;
 
   const { loading, loggingIn } = useLogin();
@@ -17,9 +16,8 @@ function Login() {
   async function handleLogin(e) {
     e.preventDefault();
 
-    await loggingIn({ email, password });
+    await loggingIn(email, password);
   }
-
 
   return (
     <>
@@ -34,11 +32,7 @@ function Login() {
             type="text"
             placeholder="Enter your Email"
             className="input input-bordered w-full max-w-xs"
-
-
             value={email}
-
-
             onChange={({ target }) =>
               registerDispatch({
                 type: LOGIN_EMAIL_INPUT,
