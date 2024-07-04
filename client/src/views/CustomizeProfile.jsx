@@ -2,6 +2,7 @@ import { useState } from "react";
 import { profileAvatar } from "../assets";
 
 import { UploadWidget } from "../components";
+import LogoutButton from "../components/LogoutButton";
 
 function CustomizeProfile() {
   const [profilePic, setProfilePic] = useState();
@@ -18,6 +19,7 @@ function CustomizeProfile() {
         }}
         setProfilePic={setProfilePic}
       />
+      <LogoutButton />
     </div>
   );
 }

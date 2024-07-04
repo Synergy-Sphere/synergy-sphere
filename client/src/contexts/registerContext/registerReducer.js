@@ -24,7 +24,7 @@ export const registerInitialState = {
 
   loginInfo: { email: "", password: "" },
 
-  loggedInUser: "" || null,
+  loggedInUser:JSON.parse(localStorage.getItem("loggedInUser")) || null,
 };
 
 export function registerReducer(registerState, { type, payload }) {
@@ -94,6 +94,13 @@ export function registerReducer(registerState, { type, payload }) {
 
         loggedInUser: payload,
       };
+    }
+
+    case REGISTER_TYPES.USER_LOG_OUT:{
+      return {
+        ...registerState,
+        loggedInUser: null
+      }
     }
 
     default: {

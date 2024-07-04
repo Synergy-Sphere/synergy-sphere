@@ -5,14 +5,16 @@ import { Login, Signup, CustomizeProfile } from "./views";
 
 import { useRegisterContext } from "./contexts/registerContext/RegisterContext";
 function App() {
-
-  const { loggedInUser } = useRegisterContext()
+  const { loggedInUser, registerDispatch, REGISTER_TYPES } =
+    useRegisterContext();
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        {loggedInUser && <Route path="/:id/customize-profile" element={<CustomizeProfile />} />}
+        {loggedInUser && (
+          <Route path="/:id/customize-profile" element={<CustomizeProfile />} />
+        )}
       </Routes>
       <Toaster />
     </>

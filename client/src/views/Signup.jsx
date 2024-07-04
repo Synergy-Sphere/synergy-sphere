@@ -2,9 +2,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
 
-// import useSignup from "../hooks/useSignup";
-
 import { useSignup } from "../hooks";
+import { useEffect } from "react";
+import LogoutButton from "../components/LogoutButton";
 
 function Signup() {
   const { signupInfo, loggedInUser, registerDispatch, REGISTER_TYPES } =
@@ -22,12 +22,11 @@ function Signup() {
 
   const { loading, signingUp } = useSignup();
 
-  const nav = useNavigate();
+  // const nav = useNavigate();
 
   async function handleSignup(e) {
     e.preventDefault();
     await signingUp({ fullName, username, email, password, confirmPassword });
-    loggedInUser && nav(`/${loggedInUser.id}/customize-profile`);
   }
   return (
     <>
@@ -116,9 +115,10 @@ function Signup() {
           </button>
         </form>
 
-        <Link to="/login" className="btn-link mt-7">
+        <Link to="/" className="btn-link mt-7">
           Login
         </Link>
+        <LogoutButton />
       </div>
     </>
   );
