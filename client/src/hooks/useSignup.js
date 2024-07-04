@@ -2,11 +2,15 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
+import { useNavigate } from "react-router-dom";
 
 function useSignup() {
   const [loading, setLoading] = useState(false);
-  const {  registerDispatch, REGISTER_TYPES } = useRegisterContext();
-  
+
+  const { registerDispatch, REGISTER_TYPES, loggedInUser } =
+    useRegisterContext();
+
+  const nav = useNavigate();
 
   async function signingUp({
     fullName,
@@ -23,7 +27,7 @@ function useSignup() {
       confirmPassword,
     });
     if (!valid) return;
-    
+
     setLoading(true);
 
     try {
@@ -44,13 +48,17 @@ function useSignup() {
       const response = await fetch("http://localhost:5555/signup", settings);
       if (response.ok) {
         const data = await response.json();
-        registerDispatch({
+        await registerDispatch({
           type: REGISTER_TYPES.ASSIGN_LOGGED_IN_USER,
           payload: data,
         });
-      }else {
-        const { error } = await response.json()
-        throw new Error(error.message)
+        if (data) {
+          localStorage.setItem("loggedInUser", JSON.stringify(await data));
+          nav(`/${data.id}/customize-profile`);
+        }
+      } else {
+        const { error } = await response.json();
+        throw new Error(error.message);
       }
     } catch (error) {
       toast.error(error.message);
