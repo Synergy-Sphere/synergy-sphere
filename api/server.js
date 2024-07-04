@@ -8,7 +8,7 @@ import loginRouter from "./routes/login.route.js";
 import createProfileRouter from "./routes/createProfile.route.js";
 import refreshTokenRouter from "./routes/refreshToken.route.js";
 import getUserDataRouter from "./routes/user.route.js";
-
+import logoutRouter from "./routes/logout.route.js";
 await connect();
 
 const app = express();
@@ -21,6 +21,7 @@ app.use(express.json());
 
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
+app.use("/logout", logoutRouter);
 app.use("/createProfile", createProfileRouter);
 app.use("/getUserData", getUserDataRouter);
 app.use("/refresh-token", refreshTokenRouter);
