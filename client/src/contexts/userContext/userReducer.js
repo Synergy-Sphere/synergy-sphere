@@ -18,7 +18,7 @@ export const USER_TYPES = {
 
 export const userInitialState = {
   userProfilePic: profileAvatar,
-  userInterests: "",
+  userInterests: null,
   userBio: "",
   userLocation: "",
   userPost: "",
@@ -29,10 +29,16 @@ export const userInitialState = {
 export function userReducer(userState, { type, payload }) {
   switch (type) {
     case USER_TYPES.SET_USER_PROFILE_PIC: {
-        return {
-            ...userState,
-            userProfilePic: payload
-        }
+      return {
+        ...userState,
+        userProfilePic: payload,
+      };
+    }
+    case USER_TYPES.SET_USER_INTERESTS: {
+      return {
+        ...userState,
+        userInterests:  payload,
+      };
     }
     default: {
       return userState;

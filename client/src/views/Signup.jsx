@@ -1,14 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
 
 import { useSignup } from "../hooks";
-import { useEffect } from "react";
+
 import LogoutButton from "../components/LogoutButton";
+import { useAuthContext } from "../contexts/authContext/AuthContext";
 
 function Signup() {
-  const { signupInfo, loggedInUser, registerDispatch, REGISTER_TYPES } =
-    useRegisterContext();
+  const { signupInfo, registerDispatch, REGISTER_TYPES } = useRegisterContext();
+
+  const { loggedInUser } = useAuthContext();
 
   const { fullName, username, email, password, confirmPassword } = signupInfo;
 
@@ -21,8 +23,6 @@ function Signup() {
   } = REGISTER_TYPES;
 
   const { loading, signingUp } = useSignup();
-
-  // const nav = useNavigate();
 
   async function handleSignup(e) {
     e.preventDefault();

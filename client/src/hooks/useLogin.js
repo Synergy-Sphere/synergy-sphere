@@ -1,11 +1,12 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
+import { useAuthContext } from "../contexts/authContext/AuthContext";
 
 function useLogin() {
   const [loading, setLoading] = useState(false);
-  const { registerDispatch, REGISTER_TYPES } = useRegisterContext();
+
+  const { updateUser } = useAuthContext();
 
   async function loggingIn(email, password) {
     const valid = checkInputsValidations({
@@ -31,10 +32,8 @@ function useLogin() {
       const response = await fetch("http://localhost:5555/login", settings);
       if (response.ok) {
         const data = await response.json();
-        registerDispatch({
-          type: REGISTER_TYPES.ASSIGN_LOGGED_IN_USER,
-          payload: data,
-        });
+
+        await updateUser(data);
       } else {
         const { error } = await response.json();
         console.log(error);

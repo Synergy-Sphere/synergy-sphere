@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 const CloudinaryScriptContext = createContext();
 
 function UploadWidget({ uwConfig, userDispatch, types }) {
+
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ function UploadWidget({ uwConfig, userDispatch, types }) {
             // console.log("Done! Here is the image info: ", result.info);
 
             userDispatch({
-              type: types.SET_USER_PROFILE_PIC,
+              type: types,
               payload: result.info.secure_url,
             });
           }

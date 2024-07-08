@@ -8,15 +8,18 @@ import "./index.css";
 import {
   RegisterContextProvider,
   UserContextProvider,
+  AuthContextProvider,
 } from "./contexts/index.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <RegisterContextProvider>
-        <UserContextProvider>
-          <App />
-        </UserContextProvider>
+        <AuthContextProvider>
+          <UserContextProvider>
+            <App />
+          </UserContextProvider>
+        </AuthContextProvider>
       </RegisterContextProvider>
     </BrowserRouter>
   </React.StrictMode>
