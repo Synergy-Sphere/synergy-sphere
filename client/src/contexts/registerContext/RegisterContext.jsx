@@ -18,15 +18,13 @@ function RegisterContextProvider({ children }) {
     registerInitialState
   );
 
-  const { signupInfo, loginInfo, loggedInUser } = registerState;
+  const { signupInfo, loginInfo } = registerState;
 
-  console.log(loggedInUser);
   return (
     <RegisterContext.Provider
       value={{
         signupInfo,
         loginInfo,
-        loggedInUser,
         registerDispatch,
         REGISTER_TYPES,
       }}

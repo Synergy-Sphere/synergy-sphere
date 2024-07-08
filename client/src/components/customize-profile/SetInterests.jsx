@@ -30,14 +30,23 @@ const interests = [
   { id: uuidV4(), value: "Animals" },
 ];
 
-function SetInterests() {
+function SetInterests({ dispatch, types, userReducerInterests }) {
   const [userInterests, setUserInterests] = useState([]);
 
+  // const { } = useUserContext()
+
+  function handleSetInterests(e) {
+    e.preventDefault();
+    dispatch({ type: types, payload: userInterests });
+  }
   return (
     <div className="flex flex-col justify-center items-center">
       <span className="flex items-center justify-center ">
         {userInterests.map((x, i) => (
-          <div key={i} className=" m-4 flex gap-2 items-center justify-center border-blue-400">
+          <div
+            key={i}
+            className=" m-4 flex gap-2 items-center justify-center border-blue-400"
+          >
             <span>{x}</span>
             <button
               className=" bg-red-200 text-white rounded-full w-4 h-4 flex items-center justify-center"
@@ -51,22 +60,28 @@ function SetInterests() {
         ))}
       </span>
 
-      <select
-        className="select select-bordered w-full max-w-xs"
-        onChange={({ target }) =>
-          setUserInterests([...userInterests, target.value])
-        }
-      >
-        {interests.map((x) => (
-          <option
-            key={x.id}
-            value={x.value}
-            disabled={userInterests.includes(x.value)}
-          >
-            {x.value}
-          </option>
-        ))}
-      </select>
+      <form onSubmit={handleSetInterests}>
+        <select
+          className="select select-bordered w-full max-w-xs"
+          // value={userInterests}
+          onChange={({ target }) =>
+            setUserInterests([...userInterests, target.value])
+          }
+        >
+          {interests.map((x) => (
+            <option
+              key={x.id}
+              value={x.value}
+              disabled={userInterests.includes(x.value)}
+            >
+              {x.value}
+            </option>
+          ))}
+        </select>
+        <button type="submit" className="btn m-3">
+          Add interests
+        </button>
+      </form>
     </div>
   );
 }

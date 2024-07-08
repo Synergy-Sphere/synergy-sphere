@@ -1,14 +1,13 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/authContext/AuthContext";
 
 function useSignup() {
   const [loading, setLoading] = useState(false);
 
-  const { registerDispatch, REGISTER_TYPES, loggedInUser } =
-    useRegisterContext();
+  const { updateUser } = useAuthContext();
 
   const nav = useNavigate();
 
@@ -46,20 +45,17 @@ function useSignup() {
         credentials: "include",
       };
       const response = await fetch("http://localhost:5555/signup", settings);
-      if (response.ok) {
-        const data = await response.json();
-        await registerDispatch({
-          type: REGISTER_TYPES.ASSIGN_LOGGED_IN_USER,
-          payload: data,
-        });
-        if (data) {
-          localStorage.setItem("loggedInUser", JSON.stringify(await data));
-          nav(`/${data.id}/customize-profile`);
-        }
-      } else {
+
+      if (!response.ok) {
         const { error } = await response.json();
         throw new Error(error.message);
       }
+
+      const data = await response.json();
+      await updateUser(data);
+
+      const userId = data._id;
+      nav(`/${userId}/customize-profile`);
     } catch (error) {
       toast.error(error.message);
     } finally {

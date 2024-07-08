@@ -111,7 +111,11 @@ const userSchema = new Schema(
           "Woodworking",
         ],
       },
-      default: ["Gaming"],
+    // !____________________________________
+    // default: ["Gaming"],
+    default: [],
+     // !____________________________________
+
     },
     posts: {
       type: [

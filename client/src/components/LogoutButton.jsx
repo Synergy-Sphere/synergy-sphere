@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
+import { useAuthContext } from "../contexts/authContext/AuthContext";
 
 function LogoutButton() {
-  const nav = useNavigate()
-  const { registerDispatch, REGISTER_TYPES } = useRegisterContext();
+  const nav = useNavigate();
+
+  const { updateUser } = useAuthContext();
   function handleLogout() {
-    registerDispatch({ type: REGISTER_TYPES.USER_LOG_OUT });
-    localStorage.removeItem("loggedInUser");
-    nav("/")
+    updateUser(null);
+    nav("/");
   }
   return (
     <button className="btn" onClick={handleLogout}>

@@ -74,12 +74,16 @@ export const signup = async (req, res, next) => {
           res.cookie("accessCookie", accessToken, accessOptions);
           res.cookie("refreshCookie", refreshToken, refreshOptions);
 
-          res.status(201).json({
-            id: newUser._id,
-            username: newUser.username,
-            fullName: newUser.fullName,
-            email: newUser.email,
-          });
+          // !____________________________________
+          // res.status(201).json({
+          //   id: newUser._id,
+          //   username: newUser.username,
+          //   fullName: newUser.fullName,
+          //   email: newUser.email,
+          // });
+          res.status(201).json(newUser);
+          // !____________________________________
+
         } catch (err) {
           if (err.name === "ValidationError") {
             const errMsg = Object.values(err.errors)[0].message;

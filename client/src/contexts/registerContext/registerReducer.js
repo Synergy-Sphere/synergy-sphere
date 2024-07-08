@@ -7,10 +7,6 @@ export const REGISTER_TYPES = {
 
   LOGIN_EMAIL_INPUT: "login-email",
   LOGIN_PASSWORD_INPUT: "login-password",
-
-  ASSIGN_LOGGED_IN_USER: "assign-logged-in-user",
-
-  USER_LOG_OUT: "user-log-out"
 };
 
 export const registerInitialState = {
@@ -23,8 +19,6 @@ export const registerInitialState = {
   },
 
   loginInfo: { email: "", password: "" },
-
-  loggedInUser:JSON.parse(localStorage.getItem("loggedInUser")) || null,
 };
 
 export function registerReducer(registerState, { type, payload }) {
@@ -79,31 +73,6 @@ export function registerReducer(registerState, { type, payload }) {
         loginInfo: { ...registerState.loginInfo, password: payload },
       };
     }
-
-    // * Signing up / Logging in
-    case REGISTER_TYPES.ASSIGN_LOGGED_IN_USER: {
-      return {
-        signupInfo: {
-          fullName: "",
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        },
-        loginInfo: { email: "", password: "" },
-
-        loggedInUser: payload,
-      };
-    }
-
-    // *Logout
-    case REGISTER_TYPES.USER_LOG_OUT:{
-      return {
-        ...registerState,
-        loggedInUser: null
-      }
-    }
-
     default: {
       return registerState;
     }

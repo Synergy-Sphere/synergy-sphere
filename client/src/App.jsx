@@ -3,10 +3,9 @@ import { Toaster } from "react-hot-toast";
 
 import { Login, Signup, CustomizeProfile } from "./views";
 
-import { useRegisterContext } from "./contexts/registerContext/RegisterContext";
+import { useAuthContext } from "./contexts/authContext/AuthContext";
 function App() {
-  const { loggedInUser, registerDispatch, REGISTER_TYPES } =
-    useRegisterContext();
+  const { loggedInUser } = useAuthContext();
   return (
     <>
       <Routes>
