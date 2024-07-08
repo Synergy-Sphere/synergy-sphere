@@ -96,6 +96,7 @@ export function registerReducer(registerState, { type, payload }) {
       };
     }
 
+    // *Logout
     case REGISTER_TYPES.USER_LOG_OUT:{
       return {
         ...registerState,

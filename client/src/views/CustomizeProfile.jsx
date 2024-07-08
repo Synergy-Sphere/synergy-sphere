@@ -1,30 +1,31 @@
-import { useState } from "react";
-import { profileAvatar } from "../assets";
+import { useUserContext } from "../contexts/userContext/UserContext";
 
-import { UploadWidget } from "../components";
-import LogoutButton from "../components/LogoutButton";
+import { UploadWidget, LogoutButton, SetInterests } from "../components";
+
 
 function CustomizeProfile() {
-  const [profilePic, setProfilePic] = useState();
+  const { userState, userDispatch, USER_TYPES } = useUserContext();
+
   return (
-    <div className="w-[80%] mx-auto my-20">
-      <img src={profilePic || profileAvatar} alt="avatar" className="w-48" />
-      <UploadWidget
-        uwConfig={{
-          cloudName: "dkxqxmpjo",
-          uploadPreset: "synergy-sphere",
-          multiple: false,
-          maxImageFileSize: 2000000,
-          folder: "avatars",
-        }}
-        setProfilePic={setProfilePic}
-      />
+    <div className="w-[80%] mx-auto my-20 flex flex-col items-center gap-12">
+      <div className="flex flex-col gap-3">
+        <img src={userState.userProfilePic} alt="avatar" className="w-48" />
+        <UploadWidget
+          uwConfig={{
+            cloudName: "dkxqxmpjo",
+            uploadPreset: "synergy-sphere",
+            multiple: false,
+            maxImageFileSize: 20000000,
+            folder: "avatars",
+          }}
+          userDispatch={userDispatch}
+          types={USER_TYPES}
+        />
+      </div>
+      <SetInterests />
       <LogoutButton />
     </div>
   );
 }
 
 export default CustomizeProfile;
-
-
-// setProfilePic(result.info.secure_url)
