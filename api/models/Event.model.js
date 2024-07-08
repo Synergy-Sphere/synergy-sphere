@@ -5,35 +5,124 @@ const eventSchema = new Schema(
     title: {
       type: String,
       required: true,
-      default: "",
     },
     description: {
       type: String,
-      required: true, // "?" 
-      default: "",
+      required: true,
     },
     eventType: {
-      type: String,
+      type: [String],
       enum: {
-        values: ["", "SPORT", "TECH", "etc..."], // add all types from User.interests or only general?
+        values: [
+          // "Sport",
+          // "Fitness",
+          // "Work out",
+          // "Football",
+          // "Basketball",
+          // "Volleyball",
+          // "Kayaking",
+          // "Scuba diving",
+          // "Swimming",
+          // "Tennis",
+          // "Yoga",
+          // "Hiking",
+          // "Cycling",
+          // "Art",
+          // "Painting",
+          // "Drawing",
+          // "Crafting",
+          // "Photography",
+          // "Writing",
+          // "Music",
+          // "Gaming",
+          // "Video games",
+          // "Board games",
+          // "Card games",
+          // "Puzzles",
+          // "Reading",
+          // "Books",
+          // "Articles",
+          // "Blogs",
+          // "Magazines",
+          // "Languages",
+          // "Science",
+          // "Technology",
+          // "IT",
+          // "Gadgets",
+          // "Programming",
+          // "Robotics",
+          // "Astronomy",
+          // "Traveling",
+          // "Cultures",
+          // "Cooking",
+          // "Volunteering",
+          // "Charity",
+          // "Movies",
+          // "TV Shows",
+          // "Watching films",
+          // "Series",
+          // "Dancing",
+          // "Concerts",
+          // "Theater",
+          // "Literature",
+          // "Blogging",
+          // "Journalism",
+          // "Gardening",
+          // "Landscaping",
+          // "Animals",
+          // "Birds",
+          // "Climbing",
+          // "Paragliding",
+          // "Meditation",
+          // "Renovating",
+          // "Decorating",
+          // "Furniture",
+          // "Design",
+          // "Crafting",
+          // "Sewing",
+          // "Knitting",
+          // "Woodworking",
+          "Sport",
+          "Yoga",
+          "Outdoor activities",
+          "Art",
+          "Photography",
+          "Writing",
+          "Music",
+          "Gaming",
+          "Languages",
+          "Science",
+          "Reading",
+          "Technology",
+          "IT",
+          "Programming",
+          "Traveling",
+          "Cooking",
+          "Volunteering",
+          "Films",
+          "Series",
+          "Dancing",
+          "Concerts",
+          "Theater",
+          "Literature",
+          "Landscaping",
+          "Design",
+          "Animals",
+        ],
       },
       required: true,
-      default: ["SPORT"], // "?"
     },
     startDate: {
-      type: String, // Date ? 
+      type: String,
       required: true,
-      default: "",
     },
     endDate: {
-      type: String, // Date ?
+      type: String,
       required: true,
-      default: "",
     },
     location: {
       type: String,
       required: true,
-      default: "",
     },
     createdBy: {
       type: mongoose.ObjectId,
@@ -41,9 +130,18 @@ const eventSchema = new Schema(
       required: true,
     },
     participants: {
-      type: Array, // we push userIds to it
-      required: true,
+      type: [
+        {
+          type: mongoose.ObjectId,
+          ref: "User",
+          required: true,
+        },
+      ],
       default: [],
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
     isPaid: {
       type: Boolean,
@@ -68,6 +166,29 @@ const eventSchema = new Schema(
   },
   { timestamps: true }
 );
+
+// tickets: {
+//   type: [
+//     {
+//       price: {
+//         type: String,
+//         required: true,
+//       },
+//       numberOfTickets: {
+//         type: Number,
+//         required: true,
+//       },
+//       //   optional ticketType : "normal", "vip"
+//     },
+//   ],
+//   validate: {
+//     validator: function(tickets) {
+//       return this.isPaid === true;
+//     },
+//     message: 'Tickets can only be specified if isPaid is true',
+//   },
+// },
+// });
 
 const Event = model("Event", eventSchema);
 
