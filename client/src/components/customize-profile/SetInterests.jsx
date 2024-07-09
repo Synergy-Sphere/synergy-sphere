@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { v4 as uuidV4 } from "uuid";
 
+import { useParams } from "react-router-dom";
+
+import { useAuthContext } from "../../contexts/authContext/AuthContext";
+
 const interests = [
   { id: uuidV4(), value: "Sport" },
   { id: uuidV4(), value: "Yoga" },
@@ -33,11 +37,39 @@ const interests = [
 function SetInterests({ dispatch, types, userReducerInterests }) {
   const [userInterests, setUserInterests] = useState([]);
 
-  // const { } = useUserContext()
+  const { loggedInUser, updateUser } = useAuthContext();
 
-  function handleSetInterests(e) {
+  const { id } = useParams();
+
+  async function handleSetInterests(e) {
     e.preventDefault();
-    dispatch({ type: types, payload: userInterests });
+    // dispatch({ type: types, payload: userInterests });
+
+    try {
+      const settings = {
+        method: "PATCH",
+        body: JSON.stringify({ interests: userInterests }),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await fetch(
+        `http://localhost:5555/createProfile/${id}/interests`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+      // console.log("data--> ", data);
+      await updateUser(data);
+    } catch (error) {
+      console.error(error.message);
+    }
   }
   return (
     <div className="flex flex-col justify-center items-center">
@@ -60,7 +92,10 @@ function SetInterests({ dispatch, types, userReducerInterests }) {
         ))}
       </span>
 
-      <form onSubmit={handleSetInterests}>
+      <form
+        onSubmit={handleSetInterests}
+        className="flex flex-col justify-center items-center"
+      >
         <select
           className="select select-bordered w-full max-w-xs"
           // value={userInterests}
@@ -87,3 +122,5 @@ function SetInterests({ dispatch, types, userReducerInterests }) {
 }
 
 export default SetInterests;
+
+

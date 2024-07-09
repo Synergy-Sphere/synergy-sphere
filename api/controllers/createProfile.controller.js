@@ -166,7 +166,9 @@ export const updateLocation = async (req, res, next) => {
 
 export const updateInterests = async (req, res, next) => {
   const id = req.params.id;
+
   const tokenUserId = req.user.id;
+
   const { interests } = req.body;
 
   if (id !== tokenUserId) {
@@ -196,19 +198,23 @@ export const updateInterests = async (req, res, next) => {
         options
       );
 
-      res.status(201).json({
-        id: updatedUser._id,
-        username: updatedUser.username,
-        email: updatedUser.email,
-        fullName: updatedUser.fullName,
-        profilePic: updatedUser.profilePic,
-        location: updatedUser.location,
-        bio: updatedUser.bio,
-        friendList: updatedUser.friendList,
-        interests: updatedUser.interests,
-        posts: updatedUser.posts,
-        events: updatedUser.events,
-      });
+      // !_______________________________
+      // res.status(201).json({
+      //   id: updatedUser._id,
+      //   username: updatedUser.username,
+      //   email: updatedUser.email,
+      //   fullName: updatedUser.fullName,
+      //   profilePic: updatedUser.profilePic,
+      //   location: updatedUser.location,
+      //   bio: updatedUser.bio,
+      //   friendList: updatedUser.friendList,
+      //   interests: updatedUser.interests,
+      //   posts: updatedUser.posts,
+      //   events: updatedUser.events,
+      // });
+
+      res.status(201).json({ updatedUser });
+      // !_______________________________
     } catch (error) {
       return next(createError(500, "Server error"));
     }
