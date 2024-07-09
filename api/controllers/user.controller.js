@@ -30,3 +30,12 @@ export async function getUserData(req, res, next) {
     next(createError(500, "Server error"));
   }
 }
+
+export const getAllUsers = async (req,res,next) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    next(createError(500, "Server error"))
+  }
+}

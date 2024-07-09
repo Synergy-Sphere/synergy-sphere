@@ -28,8 +28,8 @@ const postSchema = new Schema(
         {
           content: {
             type: String,
-            // required: true,
-            default: "",
+            required: true,
+            // default: "",
           },
           commentedBy: {
             type: mongoose.ObjectId,
@@ -53,6 +53,15 @@ const postSchema = new Schema(
       ],
       // required: true,
       default: [],
+    },
+    images: {
+      type: [String],
+      // required: true,
+      default: [],
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
     // media: {
     //   type: mongoose.ObjectId,
