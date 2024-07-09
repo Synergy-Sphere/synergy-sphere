@@ -1,11 +1,48 @@
 import { createContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useAuthContext } from "../../contexts/authContext/AuthContext";
 
 // Create a context to manage the script loading state
 const CloudinaryScriptContext = createContext();
 
-function UploadWidget({ uwConfig, userDispatch, types }) {
-
+function UploadWidget({
+  uwConfig,
+  userDispatch,
+  types,
+  userProfilePic,
+  updateUser,
+}) {
   const [loaded, setLoaded] = useState(false);
+
+  const { id } = useParams();
+
+  async function setProfilePic() {
+    try {
+      const settings = {
+        method: "PATCH",
+        body: JSON.stringify({ profilePic: userProfilePic }),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await fetch(
+        `http://localhost:5555/createProfile/${id}/profilePicture`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+      console.log("data--> ", data);
+      await updateUser(data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
   useEffect(() => {
     // Check if the script is already loaded
@@ -26,7 +63,7 @@ function UploadWidget({ uwConfig, userDispatch, types }) {
     }
   }, [loaded]);
 
-  const initializeCloudinaryWidget = () => {
+  const initializeCloudinaryWidget = async () => {
     if (loaded) {
       var myWidget = window.cloudinary.createUploadWidget(
         uwConfig,
@@ -50,6 +87,7 @@ function UploadWidget({ uwConfig, userDispatch, types }) {
         false
       );
     }
+    await setProfilePic();
   };
 
   return (
