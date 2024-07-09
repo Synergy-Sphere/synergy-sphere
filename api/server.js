@@ -26,7 +26,7 @@ app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
 app.use("/logout", logoutRouter);
 app.use("/createProfile", createProfileRouter);
-app.use("/getUserData", getUserDataRouter);
+app.use("/user", getUserDataRouter);
 app.use("/event", eventRouter);
 app.use("/post", postRouter);
 app.use("/refresh-token", refreshTokenRouter);
