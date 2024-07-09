@@ -6,4 +6,8 @@ import LogoutButton from "./LogoutButton";
 
 import SuggestedFriends from "./suggestedFriends/SuggestedFriends";
 
-export { LogoutButton, SetInterests,  UploadWidget, SuggestedFriends }
+import SetLocation from "./customize-profile/SetLocation";
+
+
+
+export { LogoutButton, SetInterests,  UploadWidget, SetLocation , SuggestedFriends}

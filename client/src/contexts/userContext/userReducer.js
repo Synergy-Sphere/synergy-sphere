@@ -1,5 +1,7 @@
 import { profileAvatar } from "../../assets";
 
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
 export const USER_TYPES = {
   SET_USER_PROFILE_PIC: "set-user-profile-pic",
 
@@ -17,10 +19,10 @@ export const USER_TYPES = {
 };
 
 export const userInitialState = {
-  userProfilePic: profileAvatar,
+  userProfilePic: loggedInUser.profilePic || profileAvatar,
   userInterests: null,
   userBio: "",
-  userLocation: "",
+  userLocation: null,
   userPost: "",
   userEvent: "",
   userFriendsList: "",
@@ -37,8 +39,14 @@ export function userReducer(userState, { type, payload }) {
     case USER_TYPES.SET_USER_INTERESTS: {
       return {
         ...userState,
-        userInterests:  payload,
+        userInterests: payload,
       };
+    }
+    case USER_TYPES.SET_USER_LOCATION: {
+      return{
+        ...userState,
+        userLocation: payload
+      }
     }
     default: {
       return userState;
