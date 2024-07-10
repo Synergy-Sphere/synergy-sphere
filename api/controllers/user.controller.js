@@ -31,11 +31,41 @@ export async function getUserData(req, res, next) {
   }
 }
 
-export const getAllUsers = async (req,res,next) => {
+export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
-    next(createError(500, "Server error"))
+    next(createError(500, "Server error"));
+  }
+};
+
+// !_______________________________
+// !_______________________________
+// !_______________________________
+// * Herr Mekael -->
+
+export async function getOneUser(req, res) {
+  const { username } = req.params;
+  try {
+    const foundUser = await User.findOne({ username });
+
+    if (!foundUser) next(createError(404, "Bad request"));
+
+    res.json({
+      id: foundUser._id,
+      username: foundUser.username,
+      email: foundUser.email,
+      fullName: foundUser.fullName,
+      profilePic: foundUser.profilePic,
+      location: foundUser.location,
+      bio: foundUser.bio,
+      friendList: foundUser.friendList,
+      interests: foundUser.interests,
+      posts: foundUser.posts,
+      events: foundUser.events,
+    });
+  } catch (error) {
+    next(createError(500, "Server error"));
   }
 }

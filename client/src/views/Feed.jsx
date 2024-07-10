@@ -8,15 +8,12 @@ function Feed() {
   return (
     <>
       <section className="w-[90vw] mx-auto">
-        <header className="flex justify-center items-center m-4">
-          <Navbar />
-          {/* <LogoutButton /> */}
-        </header>
+        
         <main className="flex justify-between">
           <div className="w-[60%]">
             <SwitchPostsEvents />
           </div>
-          <div className="w-[20%]">
+          <div className="w-[20%] h-[80vh] overflow-y-scroll">
             <SuggestedFriends />
           </div>
           

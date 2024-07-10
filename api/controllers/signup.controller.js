@@ -15,7 +15,7 @@ export const signup = async (req, res, next) => {
   }
 
   if (foundUser) {
-    return next(createError(409, "Such username already in use"));
+    return next(createError(409, "username is already in use"));
   } else {
     try {
       foundUser = await User.findOne({ email: email });
@@ -24,7 +24,7 @@ export const signup = async (req, res, next) => {
     }
 
     if (foundUser) {
-      return next(createError(409, "Such email already in use"));
+      return next(createError(409, "email is already in use"));
     } else {
       if (password !== confirmPassword) {
         return next(

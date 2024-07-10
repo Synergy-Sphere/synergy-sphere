@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { useAuthContext } from "../../contexts/authContext/AuthContext";
 
@@ -10,7 +10,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 function Navbar() {
   const nav = useNavigate();
   const { loggedInUser, updateUser } = useAuthContext();
-//   const [view, setView] = useState(0);
+  const { id } = useParams();
+  
 
 function handleLogout() {
     updateUser(null);
@@ -21,7 +22,7 @@ function handleLogout() {
     <nav>
       <ul className="flex justify-center items-center gap-8">
         <li>
-          <Link>
+          <Link to={`/${id}/feed/${loggedInUser.username}`}>
             <Avatar
               alt=""
               src={loggedInUser.profilePic}

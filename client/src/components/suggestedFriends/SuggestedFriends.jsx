@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import SuggestedFriend from "./SuggestedFriend";
+import OneSuggestedFriend from "./OneSuggestedFriend";
 
 const SuggestedFriends = () => {
   const [suggestedFriends, setSuggestedFriends] = useState([]);
   useEffect(() => {
     async function getAllUsers() {
-      const res = await fetch("http://localhost:5555/user/suggestedFriends", {
-        credentials: "include",
-      });
-      if (res.ok) {
-        const data = await res.json();
+      const response = await fetch(
+        "http://localhost:5555/user/suggestedFriends",
+        {
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
         setSuggestedFriends(data);
       } else {
-        const { error } = res.json();
+        const { error } = response.json();
         console.log(error.message);
       }
     }
@@ -21,12 +24,13 @@ const SuggestedFriends = () => {
 
   return (
     <div>
-      {suggestedFriends.map((suggestedFriend) => (
-        <SuggestedFriend
-          key={suggestedFriend._id}
-          fullName={suggestedFriend.fullName}
-          interests={suggestedFriend.interests}
-          profilePic={suggestedFriend.profilePic}
+      {suggestedFriends?.map((x) => (
+        <OneSuggestedFriend
+          key={x._id}
+          fullName={x.fullName}
+          interests={x.interests}
+          profilePic={x.profilePic}
+          username={x.username}
         />
       ))}
     </div>
