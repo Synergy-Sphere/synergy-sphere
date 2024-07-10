@@ -7,9 +7,9 @@ import {
   SetLocation,
 } from "../components";
 import { useAuthContext } from "../contexts/authContext/AuthContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function CustomizeProfile() {
+function CustomizeProfile({ setCanNavToFeed }) {
   const {
     userDispatch,
     userProfilePic,
@@ -23,7 +23,9 @@ function CustomizeProfile() {
 
   const { updateUser } = useAuthContext();
 
-  const { id } = useParams()
+  const { id } = useParams();
+
+  const nav = useNavigate();
 
   return (
     <div className="w-[80%] mx-auto my-20 flex flex-col items-center gap-12">
@@ -55,6 +57,15 @@ function CustomizeProfile() {
         updateUser={updateUser}
         idParams={id}
       />
+      <button
+      className="btn m-4"
+        onClick={() => {
+          setCanNavToFeed(true);
+          nav(`/${id}/feed`);
+        }}
+      >
+        READY
+      </button>
       <LogoutButton />
     </div>
   );

@@ -19,7 +19,7 @@ function AuthContextProvider({ children }) {
     localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
   }, [loggedInUser]);
 
-  if (loggedInUser) console.log(loggedInUser);
+  if (loggedInUser) console.log("loggedIn user -->", loggedInUser);
   return (
     <AuthContext.Provider value={{ loggedInUser, updateUser }}>
       {children}

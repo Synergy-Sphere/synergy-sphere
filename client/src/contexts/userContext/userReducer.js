@@ -19,7 +19,7 @@ export const USER_TYPES = {
 };
 
 export const userInitialState = {
-  userProfilePic: loggedInUser.profilePic || profileAvatar,
+  userProfilePic: loggedInUser?.profilePic || profileAvatar,
   userInterests: null,
   userBio: "",
   userLocation: null,

@@ -11,12 +11,15 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Login setCanNavToFeed={setCanNavToFeed} />} />
         <Route path="/signup" element={<Signup />} />
         {loggedInUser && (
-          <Route path="/:id/customize-profile" element={<CustomizeProfile />} />
+          <Route
+            path="/:id/customize-profile"
+            element={<CustomizeProfile setCanNavToFeed={setCanNavToFeed} />}
+          />
         )}
-        {loggedInUser && canNavToFeed && (
+        {loggedInUser &&  (
           <Route path="/:id/feed" element={<Feed />}>
             <Route />
             <Route />
