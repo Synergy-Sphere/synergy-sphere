@@ -150,46 +150,12 @@ export const likePost = async (req, res, next) => {
   if (!foundPost) {
     return next(createError(404, "Post doesn't exist"));
   } else {
+    const alreadyLiked = foundPost.likes.find(
+      (like) => like.toString() === tokenUserId
+    );
+
     try {
-      const options = {
-        new: true,
-        runValidators: true,
-      };
-
-      const updatedPost = await Post.findByIdAndUpdate(
-        id,
-        {
-          $push: { likes: tokenUserId },
-        },
-        options
-      );
-
-      res.status(200).json(updatedPost);
-    } catch {
-      next(createError(500, "Server error"));
-    }
-  }
-};
-
-export const removeLikeFromPost = async (req, res, next) => {
-  const id = req.params.id;
-  const tokenUserId = req.user.id;
-
-  let foundPost;
-
-  try {
-    foundPost = await Post.findById(id);
-  } catch {
-    return next(createError(500, "Server error"));
-  }
-
-  if (!foundPost) {
-    return next(createError(404, "Post doesn't exist"));
-  } else {
-    if (!foundPost.likes.includes(tokenUserId)) {
-      return next(createError(403, "Sorry, you wasn't liking this Post"));
-    } else {
-      try {
+      if (alreadyLiked) {
         const options = {
           new: true,
           runValidators: true,
@@ -199,19 +165,44 @@ export const removeLikeFromPost = async (req, res, next) => {
           (like) => like.toString() !== tokenUserId
         );
 
-        const updatedPost = await Post.findByIdAndUpdate(
+        await Post.findByIdAndUpdate(
           id,
           {
             $set: { likes: likesToRemain },
           },
           options
         );
+      } else {
+        const options = {
+          new: true,
+          runValidators: true,
+        };
 
-        res.status(200).json(updatedPost);
-      } catch {
-        next(createError(500, "Server error"));
+        await Post.findByIdAndUpdate(
+          id,
+          {
+            $push: { likes: tokenUserId },
+          },
+          options
+        );
       }
+    } catch (error) {
+      return next(createError(500, "Server error"));
     }
+    const allPosts = await Post.find();
+    const populatedPosts = await Promise.all(
+      allPosts.map(async (post) => {
+        await post.populate("createdBy", {
+          fullName: 1,
+          profilePic: 1,
+        });
+
+        await post.populate("likes", { fullName: 1, _id: 0 });
+        return post; // return the populated post
+      })
+    );
+
+    res.status(200).json(populatedPosts);
   }
 };
 
@@ -369,7 +360,18 @@ export async function getAllPosts(req, res, next) {
   try {
     const allPosts = await Post.find();
 
-    res.json(allPosts);
+    const populatedPosts = await Promise.all(
+      allPosts.map(async (post) => {
+        await post.populate("createdBy", {
+          fullName: 1,
+          profilePic: 1,
+        });
+
+        await post.populate("likes", { fullName: 1, _id: 0 });
+        return post; // return the populated post
+      })
+    );
+    res.json(populatedPosts);
   } catch {
     next(createError(500, "Server error"));
   }
@@ -385,6 +387,13 @@ export async function getUserPosts(req, res, next) {
 
     res.json(oneUserPosts);
   } catch {
+    next(createError(500, "Server error"));
+  }
+}
+
+export async function getLikesOnEachPost(req, res, next) {
+  try {
+  } catch (error) {
     next(createError(500, "Server error"));
   }
 }

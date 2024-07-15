@@ -7,7 +7,7 @@ function usePost() {
   const [loading, setLoading] = useState(false);
   const { updateUser } = useAuthContext();
 
-  const { postDispatch, GET_ALL_POSTS} = usePostContext()
+  const { postDispatch, GET_ALL_POSTS } = usePostContext();
 
   async function createPost(content) {
     setLoading(true);
@@ -52,17 +52,38 @@ function usePost() {
 
       const data = await response.json();
 
-      
-      postDispatch({type: GET_ALL_POSTS, payload: data})
+      postDispatch({ type: GET_ALL_POSTS, payload: data });
       // console.log(data);
-
-      // todo --> postsContext
     } catch (error) {
       toast.error(error.message);
     }
   }
 
-  return { createPost, getAllPosts, loading };
+  async function giveLike(postId) {
+    try {
+      const settings = {
+        method: "PATCH",
+        credentials: "include",
+      };
+
+      const response = await fetch(
+        `http://localhost:5555/post/like/${postId}`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+
+      postDispatch({ type: GET_ALL_POSTS, payload: data });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  return { createPost, getAllPosts, giveLike, loading };
 }
 
 export default usePost;
