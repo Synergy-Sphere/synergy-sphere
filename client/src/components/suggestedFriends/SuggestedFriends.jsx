@@ -28,7 +28,7 @@ const SuggestedFriends = () => {
   return (
     <div>
       {suggestedFriends
-        ?.filter((notAuth) => loggedInUser._id !== notAuth._id)
+        ?.filter((notAuth) => loggedInUser.id !== notAuth._id)
         .map((x) => (
           <OneSuggestedFriend
             key={x._id}
