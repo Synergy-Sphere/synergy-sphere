@@ -9,6 +9,7 @@ import {
   RegisterContextProvider,
   UserContextProvider,
   AuthContextProvider,
+  PostContextProvider,
 } from "./contexts/index.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <RegisterContextProvider>
         <AuthContextProvider>
           <UserContextProvider>
-            <App />
+            <PostContextProvider>
+              <App />
+            </PostContextProvider>
           </UserContextProvider>
         </AuthContextProvider>
       </RegisterContextProvider>

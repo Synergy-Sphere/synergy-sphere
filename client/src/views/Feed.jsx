@@ -1,7 +1,5 @@
 import {
-  LogoutButton,
   SuggestedFriends,
-  Navbar,
   SwitchPostsEvents,
 } from "../components";
 function Feed() {

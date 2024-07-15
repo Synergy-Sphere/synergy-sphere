@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import OneSuggestedFriend from "./OneSuggestedFriend";
+import { useAuthContext } from "../../contexts/authContext/AuthContext";
 
 const SuggestedFriends = () => {
   const [suggestedFriends, setSuggestedFriends] = useState([]);
+
+  const { loggedInUser } = useAuthContext();
   useEffect(() => {
     async function getAllUsers() {
       const response = await fetch(
@@ -24,15 +27,17 @@ const SuggestedFriends = () => {
 
   return (
     <div>
-      {suggestedFriends?.map((x) => (
-        <OneSuggestedFriend
-          key={x._id}
-          fullName={x.fullName}
-          interests={x.interests}
-          profilePic={x.profilePic}
-          username={x.username}
-        />
-      ))}
+      {suggestedFriends
+        ?.filter((notAuth) => loggedInUser._id !== notAuth._id)
+        .map((x) => (
+          <OneSuggestedFriend
+            key={x._id}
+            fullName={x.fullName}
+            interests={x.interests}
+            profilePic={x.profilePic}
+            username={x.username}
+          />
+        ))}
     </div>
   );
 };
