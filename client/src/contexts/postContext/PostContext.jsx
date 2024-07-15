@@ -12,7 +12,7 @@ function PostContextProvider({ children }) {
   const [postState, postDispatch] = useReducer(postReducer, postInitialState);
 
 
-  console.log("post state --> ", postState);
+  // console.log("post state --> ", postState);
   return (
     <PostContext.Provider value={{ ...postState, ...POST_TYPES, postDispatch }}>
       {children}

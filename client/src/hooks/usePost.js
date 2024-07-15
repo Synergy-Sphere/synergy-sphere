@@ -1,12 +1,15 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../contexts/authContext/AuthContext";
+import { usePostContext } from "../contexts/postContext/PostContext";
 
-function useCreatePost() {
+function usePost() {
   const [loading, setLoading] = useState(false);
   const { updateUser } = useAuthContext();
 
-  async function posting(content) {
+  const { postDispatch, GET_ALL_POSTS} = usePostContext()
+
+  async function createPost(content) {
     setLoading(true);
 
     try {
@@ -49,13 +52,17 @@ function useCreatePost() {
 
       const data = await response.json();
 
+      
+      postDispatch({type: GET_ALL_POSTS, payload: data})
+      // console.log(data);
+
       // todo --> postsContext
     } catch (error) {
       toast.error(error.message);
     }
   }
 
-  return { posting, loading };
+  return { createPost, getAllPosts, loading };
 }
 
-export default useCreatePost;
+export default usePost;

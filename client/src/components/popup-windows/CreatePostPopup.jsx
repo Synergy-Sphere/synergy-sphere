@@ -2,17 +2,17 @@ import React from "react";
 import { profileAvatar } from "../../assets";
 import { usePostContext } from "../../contexts/postContext/PostContext";
 
-import { useCreatePost } from "../../hooks";
+import { usePost } from "../../hooks";
 
 function CreatePostPopup() {
   const { content, TEXT_AREA, postDispatch } = usePostContext();
 
-  const { posting } = useCreatePost();
+  const { createPost } = usePost();
 
   async function handlePost(e) {
     e.preventDefault();
 
-    await posting(content);
+    await createPost(content);
   }
   return (
     <div className="w-full h-[100vh] flex justify-center items-center fixed z-30 opacity-100 blur-0">

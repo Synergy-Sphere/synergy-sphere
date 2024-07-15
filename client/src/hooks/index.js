@@ -1,5 +1,5 @@
 import useSignup from "./useSignup";
 import useLogin from "./useLogin";
-import useCreatePost from "./useCreatePost";
+import usePost from "./usePost";
 
-export { useSignup, useLogin, useCreatePost };
+export { useSignup, useLogin, usePost };
