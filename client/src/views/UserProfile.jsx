@@ -24,7 +24,7 @@ const [ showPopup, setShowPopup ] = useState(false)
 
   const trY = true
 
-  console.log(isOwner);
+  // console.log(isOwner);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -45,7 +45,7 @@ const [ showPopup, setShowPopup ] = useState(false)
     getUserInfo();
   }, []);
 
-  console.log("visited user info -->", userInfo);
+  // console.log("visited user info -->", userInfo);
   return (
     <>
     <div className=" relative">
