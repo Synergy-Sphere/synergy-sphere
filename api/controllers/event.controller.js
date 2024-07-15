@@ -258,6 +258,32 @@ export const declineEvent = async (req, res, next) => {
   }
 };
 
+
+export async function getAllEvents(req, res, next) {
+  try {
+    const allEvents = await Event.find();
+
+    res.json(allEvents);
+  } catch {
+    next(createError(500, "Server error"));
+  }
+}
+
+// export async function getUserEvents(req, res, next) {
+//   const { username } = req.params;
+
+//   try {
+//     const foundUser = await User.findOne({ username });
+//     console.log(foundUser._id);
+//     const oneUserEvents = await Event.find({ createdBy: foundUser._id });
+
+//     res.json(oneUserEvents);
+//   } catch {
+//     next(createError(500, "Server error"));
+//   }
+// }
+
+
 // export const buyTicket = (req,res,next) => {
 
 // }

@@ -10,7 +10,9 @@ import {
   UserContextProvider,
   AuthContextProvider,
   PostContextProvider,
+  EventContextProvider,
 } from "./contexts/index.js";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -19,7 +21,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <AuthContextProvider>
           <UserContextProvider>
             <PostContextProvider>
+              <EventContextProvider>
               <App />
+              </EventContextProvider>
             </PostContextProvider>
           </UserContextProvider>
         </AuthContextProvider>
