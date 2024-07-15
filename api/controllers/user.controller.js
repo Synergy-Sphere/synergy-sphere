@@ -45,7 +45,7 @@ export const getAllUsers = async (req, res, next) => {
 // !_______________________________
 // * Herr Mekael -->
 
-export async function getOneUser(req, res) {
+export async function getOneUser(req, res, next) {
   const { username } = req.params;
   try {
     const foundUser = await User.findOne({ username });

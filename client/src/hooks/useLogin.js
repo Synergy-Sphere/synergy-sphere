@@ -1,12 +1,16 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
+import { useNavigate } from "react-router-dom";
+
 import { useAuthContext } from "../contexts/authContext/AuthContext";
 
 function useLogin() {
   const [loading, setLoading] = useState(false);
 
   const { updateUser } = useAuthContext();
+
+  const nav = useNavigate();
 
   async function loggingIn(email, password) {
     const valid = checkInputsValidations({
@@ -30,15 +34,18 @@ function useLogin() {
       };
 
       const response = await fetch("http://localhost:5555/login", settings);
-      if (response.ok) {
-        const data = await response.json();
 
-        await updateUser(data);
-      } else {
+      if (!response.ok) {
         const { error } = await response.json();
         console.log(error);
         throw new Error(error.message);
       }
+
+      const data = await response.json();
+      await updateUser(data);
+
+      const userId = data._id;
+      nav(`/${userId}/feed`);
     } catch (error) {
       toast.error(error.message);
     } finally {

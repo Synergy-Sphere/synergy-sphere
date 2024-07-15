@@ -2,7 +2,7 @@
 
 function EventsComponent() {
   return (
-    <div>EventsComponent</div>
+    <h3 className=" text-2xl text-center uppercase ">Events</h3>
   )
 }
 

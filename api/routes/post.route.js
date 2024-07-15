@@ -1,6 +1,17 @@
 import { Router } from "express";
 import authenticateToken from "../middleware/authenticateToken.js";
-import { createPost, editPost, deletePost, likePost, removeLikeFromPost, addCommentToPost, editComment, removeComment } from "../controllers/post.controller.js";
+import {
+  createPost,
+  editPost,
+  deletePost,
+  likePost,
+  removeLikeFromPost,
+  addCommentToPost,
+  editComment,
+  removeComment,
+  getAllPosts,
+  getUserPosts,
+} from "../controllers/post.controller.js";
 
 const router = Router();
 
@@ -15,7 +26,14 @@ router.patch("/removeLike/:id", removeLikeFromPost);
 //? comments to posts
 router.patch("/addComment/:id/", addCommentToPost);
 router.patch("/:id/editComment/:commentId", editComment);
-router.patch("/:id/removeComment/:commentId", removeComment)
+router.patch("/:id/removeComment/:commentId", removeComment);
 //? optionally later add like/removeLike for comment
 
+// !_______________________________
+// !_______________________________
+// !_______________________________
+// * Herr Mekael -->
+
+router.get("/getPosts", getAllPosts);
+router.get("/:username/getUserPosts", getUserPosts);
 export default router;

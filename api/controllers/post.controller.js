@@ -25,11 +25,19 @@ export const createPost = async (req, res, next) => {
         images,
       });
 
-      await User.findByIdAndUpdate(tokenUserId, {
-        $push: { posts: newPost._id },
-      });
+      const updatedUser = await User.findByIdAndUpdate(
+        tokenUserId,
+        {
+          $push: { posts: newPost._id },
+        },
+        {
+          new: true,
+        }
+      );
 
-      res.status(200).json(newPost);
+      await updatedUser.populate("posts", { content: 1, createdBy: 1 });
+
+      res.status(200).json(updatedUser);
     } catch {
       next(createError(500, "Server error"));
     }
@@ -51,7 +59,7 @@ export const editPost = async (req, res, next) => {
   }
 
   if (!foundPost) {
-    return next(createError(404, "There is no such Post"));
+    return next(createError(404, "Post doesn't exist"));
   } else {
     if (foundPost.createdBy.toString() !== tokenUserId) {
       return next(createError(403, "Sorry, you are not Creator of this Post"));
@@ -92,7 +100,7 @@ export const deletePost = async (req, res, next) => {
   }
 
   if (!foundPost) {
-    return next(createError(404, "There is no such post"));
+    return next(createError(404, "Post doesn't exist"));
   } else {
     if (foundPost.createdBy.toString() !== tokenUserId) {
       return next(createError(403, "Sorry, you are not Host of this post"));
@@ -140,7 +148,7 @@ export const likePost = async (req, res, next) => {
   }
 
   if (!foundPost) {
-    return next(createError(404, "There is no such Post"));
+    return next(createError(404, "Post doesn't exist"));
   } else {
     try {
       const options = {
@@ -176,7 +184,7 @@ export const removeLikeFromPost = async (req, res, next) => {
   }
 
   if (!foundPost) {
-    return next(createError(404, "There is no such Post"));
+    return next(createError(404, "Post doesn't exist"));
   } else {
     if (!foundPost.likes.includes(tokenUserId)) {
       return next(createError(403, "Sorry, you wasn't liking this Post"));
@@ -221,7 +229,7 @@ export const addCommentToPost = async (req, res, next) => {
   }
 
   if (!foundPost) {
-    return next(createError(404, "There is no such Post"));
+    return next(createError(404, "Post doesn't exist"));
   } else {
     try {
       const options = {
@@ -265,13 +273,13 @@ export const editComment = async (req, res, next) => {
   }
 
   if (!foundPost) {
-    return next(createError(404, "There is no such Post"));
+    return next(createError(404, "Post doesn't exist"));
   } else {
     const comment = foundPost.comments.find(
       (x) => x._id.toString() === commentId
     );
     if (!comment) {
-      return next(createError(404, "There is no such comment"));
+      return next(createError(404, "Comment doesn't exist"));
     } else {
       if (comment.commentedBy.toString() !== tokenUserId) {
         return next(createError(403, "You can edit only your comments"));
@@ -315,13 +323,13 @@ export const removeComment = async (req, res, next) => {
   }
 
   if (!foundPost) {
-    return next(createError(404, "There is no such Post"));
+    return next(createError(404, "Post doesn't exist"));
   } else {
     const comment = foundPost.comments.find(
       (x) => x._id.toString() === commentId
     );
     if (!comment) {
-      return next(createError(404, "There is no such comment"));
+      return next(createError(404, "Comment doesn't exist"));
     } else {
       if (comment.commentedBy.toString() !== tokenUserId) {
         return next(createError(403, "You can remove only your comments"));
@@ -351,3 +359,32 @@ export const removeComment = async (req, res, next) => {
     }
   }
 };
+
+// !_______________________________
+// !_______________________________
+// !_______________________________
+// * Herr Mekael -->
+
+export async function getAllPosts(req, res, next) {
+  try {
+    const allPosts = await Post.find();
+
+    res.json(allPosts);
+  } catch {
+    next(createError(500, "Server error"));
+  }
+}
+
+export async function getUserPosts(req, res, next) {
+  const { username } = req.params;
+
+  try {
+    const foundUser = await User.findOne({ username });
+    console.log(foundUser._id);
+    const oneUserPosts = await Post.find({ createdBy: foundUser._id });
+
+    res.json(oneUserPosts);
+  } catch {
+    next(createError(500, "Server error"));
+  }
+}

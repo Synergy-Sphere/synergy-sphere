@@ -13,7 +13,7 @@ function UserContextProvider({ children }) {
   const [userState, userDispatch] = useReducer(userReducer, userInitialState);
 
   const { loggedInUser, updateUser } = useAuthContext();
-console.log("user state --> ", userState);
+// console.log("user state --> ", userState);
   return (
     <UserContext.Provider value={{ ...userState, userDispatch, ...USER_TYPES }}>
       {children}

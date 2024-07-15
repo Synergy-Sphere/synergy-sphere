@@ -50,10 +50,13 @@ export const login = async (req, res, next) => {
   res.cookie("accessCookie", accessToken, accessOptions);
   res.cookie("refreshCookie", refreshToken, refreshOptions);
 
-  res.json({
-    id: foundUser._id,
-    username: foundUser.username,
-    fullName: foundUser.fullName,
-    email: foundUser.email,
-  });
+  // !____________________________________
+  // res.json({
+  //   id: foundUser._id,
+  //   username: foundUser.username,
+  //   fullName: foundUser.fullName,
+  //   email: foundUser.email,
+  // });
+  res.json(foundUser)
+  // !____________________________________
 };
