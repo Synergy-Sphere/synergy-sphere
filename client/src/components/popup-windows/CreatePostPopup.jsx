@@ -5,14 +5,20 @@ import { usePostContext } from "../../contexts/postContext/PostContext";
 import { usePost } from "../../hooks";
 
 function CreatePostPopup() {
-  const { content, TEXT_AREA, postDispatch } = usePostContext();
+  const { content, TEXT_AREA, postDispatch, SHOW_CREATE_POST_POPUP } =
+    usePostContext();
 
   const { createPost } = usePost();
+
+  function handleClosePopup() {
+    postDispatch({ type: SHOW_CREATE_POST_POPUP, payload: false });
+  }
 
   async function handlePost(e) {
     e.preventDefault();
 
     await createPost(content);
+    handleClosePopup()
   }
   return (
     <div className="w-full h-[100vh] flex justify-center items-center fixed z-30 opacity-100 blur-0">
@@ -20,7 +26,9 @@ function CreatePostPopup() {
         <div className="relative border-b border-gray-400 ">
           <h4 className=" text-center text-2xl font-bold  mb-4">Create post</h4>
 
-          <button className="btn rounded-full absolute right-0 top-[-.7rem] bg-red-300 text-3xl">
+          <button className="btn rounded-full absolute right-0 top-[-.7rem] bg-red-300 text-3xl"
+          onClick={handleClosePopup}
+          >
             &times;
           </button>
         </div>

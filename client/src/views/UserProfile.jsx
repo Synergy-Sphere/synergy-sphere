@@ -9,12 +9,15 @@ import { SuggestedFriends, SwitchPostsEvents } from "../components";
 
 import { grayBg, profileAvatar } from "../assets";
 import { CreatePostPopup } from "../components/popup-windows";
+import { usePostContext } from "../contexts/postContext/PostContext";
 
 
 function UserProfile() {
 const [userInfo, setUserInfo] = useState(null);
 
-const [ showPopup, setShowPopup ] = useState(false)
+// const [ showPopup, setShowPopup ] = useState(false)
+
+const { showPopup } = usePostContext()
 
   const { id, username } = useParams();
 
@@ -101,7 +104,8 @@ const [ showPopup, setShowPopup ] = useState(false)
                 <SuggestedFriends />
           </div>
           <div className="w-[45%]">
-                <SwitchPostsEvents />
+            
+                <SwitchPostsEvents isOwner={isOwner} />
           </div>
         </main>
       </section>

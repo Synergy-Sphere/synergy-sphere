@@ -33,19 +33,22 @@ export const updateBio = async (req, res, next) => {
         options
       );
 
-      res.status(201).json({
-        id: updatedUser._id,
-        username: updatedUser.username,
-        email: updatedUser.email,
-        fullName: updatedUser.fullName,
-        profilePic: updatedUser.profilePic,
-        location: updatedUser.location,
-        bio: updatedUser.bio,
-        friendList: updatedUser.friendList,
-        interests: updatedUser.interests,
-        posts: updatedUser.posts,
-        events: updatedUser.events,
-      });
+      // !_________________________________________
+      // res.status(201).json({
+      //   id: updatedUser._id,
+      //   username: updatedUser.username,
+      //   email: updatedUser.email,
+      //   fullName: updatedUser.fullName,
+      //   profilePic: updatedUser.profilePic,
+      //   location: updatedUser.location,
+      //   bio: updatedUser.bio,
+      //   friendList: updatedUser.friendList,
+      //   interests: updatedUser.interests,
+      //   posts: updatedUser.posts,
+      //   events: updatedUser.events,
+      // });
+      res.status(201).json(updatedUser);
+      // !_________________________________________
     } catch (error) {
       return next(createError(500, "Server error"));
     }
@@ -86,19 +89,22 @@ export const updateProfilePicture = async (req, res, next) => {
         options
       );
 
-      res.status(201).json({
-        id: updatedUser._id,
-        username: updatedUser.username,
-        email: updatedUser.email,
-        fullName: updatedUser.fullName,
-        profilePic: updatedUser.profilePic,
-        location: updatedUser.location,
-        bio: updatedUser.bio,
-        friendList: updatedUser.friendList,
-        interests: updatedUser.interests,
-        posts: updatedUser.posts,
-        events: updatedUser.events,
-      });
+      // !_________________________________________
+      // res.status(201).json({
+      //   id: updatedUser._id,
+      //   username: updatedUser.username,
+      //   email: updatedUser.email,
+      //   fullName: updatedUser.fullName,
+      //   profilePic: updatedUser.profilePic,
+      //   location: updatedUser.location,
+      //   bio: updatedUser.bio,
+      //   friendList: updatedUser.friendList,
+      //   interests: updatedUser.interests,
+      //   posts: updatedUser.posts,
+      //   events: updatedUser.events,
+      // });
+      res.status(201).json(updatedUser);
+      // !_________________________________________
     } catch (error) {
       return next(createError(500, "Server error"));
     }
@@ -142,20 +148,22 @@ export const updateLocation = async (req, res, next) => {
         },
         options
       );
-
-      res.status(201).json({
-        id: updatedUser._id,
-        username: updatedUser.username,
-        email: updatedUser.email,
-        fullName: updatedUser.fullName,
-        profilePic: updatedUser.profilePic,
-        location: updatedUser.location,
-        bio: updatedUser.bio,
-        friendList: updatedUser.friendList,
-        interests: updatedUser.interests,
-        posts: updatedUser.posts,
-        events: updatedUser.events,
-      });
+      // !_________________________________________
+      // res.status(201).json({
+      //   id: updatedUser._id,
+      //   username: updatedUser.username,
+      //   email: updatedUser.email,
+      //   fullName: updatedUser.fullName,
+      //   profilePic: updatedUser.profilePic,
+      //   location: updatedUser.location,
+      //   bio: updatedUser.bio,
+      //   friendList: updatedUser.friendList,
+      //   interests: updatedUser.interests,
+      //   posts: updatedUser.posts,
+      //   events: updatedUser.events,
+      // });
+      res.status(201).json(updatedUser);
+      // !_________________________________________
     } catch (error) {
       return next(createError(500, "Server error"));
     }
@@ -213,7 +221,7 @@ export const updateInterests = async (req, res, next) => {
       //   events: updatedUser.events,
       // });
 
-      res.status(201).json({ updatedUser });
+      res.status(201).json(updatedUser);
       // !_______________________________
     } catch (error) {
       return next(createError(500, "Server error"));
