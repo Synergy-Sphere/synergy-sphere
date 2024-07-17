@@ -191,15 +191,18 @@ export const likePost = async (req, res, next) => {
     }
     const allPosts = await Post.find();
     const populatedPosts = await Promise.all(
-      allPosts.map(async (post) => {
-        await post.populate("createdBy", {
-          fullName: 1,
-          profilePic: 1,
-        });
+      allPosts
+        .filter((post) => post.deletedAt === null)
+        .map(async (post) => {
+          await post.populate("createdBy", {
+            fullName: 1,
+            profilePic: 1,
+            username: 1,
+          });
 
-        await post.populate("likes", { fullName: 1, _id: 0 });
-        return post; // return the populated post
-      })
+          await post.populate("likes", { fullName: 1, _id: 0 });
+          return post; // return the populated post
+        })
     );
 
     res.status(200).json(populatedPosts);
@@ -361,15 +364,17 @@ export async function getAllPosts(req, res, next) {
     const allPosts = await Post.find();
 
     const populatedPosts = await Promise.all(
-      allPosts.map(async (post) => {
-        await post.populate("createdBy", {
-          fullName: 1,
-          profilePic: 1,
-        });
+      allPosts
+        .filter((post) => post.deletedAt === null)
+        .map(async (x) => {
+          await x.populate("createdBy", {
+            fullName: 1,
+            profilePic: 1,
+          });
 
-        await post.populate("likes", { fullName: 1, _id: 0 });
-        return post; // return the populated post
-      })
+          await x.populate("likes", { fullName: 1, _id: 0 });
+          return x; // return the populated post
+        })
     );
     res.json(populatedPosts);
   } catch {
@@ -385,7 +390,20 @@ export async function getUserPosts(req, res, next) {
     console.log(foundUser._id);
     const oneUserPosts = await Post.find({ createdBy: foundUser._id });
 
-    res.json(oneUserPosts);
+    const populatedOneUserPosts = await Promise.all(
+      oneUserPosts
+        .filter((post) => post.deletedAt === null)
+        .map(async (x) => {
+          await x.populate("createdBy", {
+            fullName: 1,
+            profilePic: 1,
+          });
+          await x.populate("likes", { fullName: 1, _id: 0 });
+          return x;
+        })
+    );
+
+    res.json(populatedOneUserPosts);
   } catch {
     next(createError(500, "Server error"));
   }

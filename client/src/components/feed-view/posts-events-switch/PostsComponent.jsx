@@ -5,22 +5,41 @@ import { useEffect } from "react";
 import { usePostContext } from "../../../contexts/postContext/PostContext";
 import OnePost from "./OnePost";
 
-function PostsComponent() {
+function PostsComponent({ isOwner }) {
   const { username } = useParams();
 
   const { loggedInUser } = useAuthContext();
-  const { allPosts, postDispatch } = usePostContext();
+  const {
+    allPosts,
+    oneUserPosts,
+    postDispatch,
+    showPopup,
+    GET_ALL_POSTS,
+    ONE_USER_POSTS,
+    SHOW_CREATE_POST_POPUP,
+  } = usePostContext();
 
-  const { getAllPosts, giveLike } = usePost();
+  const { getAllPosts, getUserPosts, giveLike, deletePost } = usePost();
 
   useEffect(() => {
-    async function renderPosts() {
+    async function renderAllPosts() {
       await getAllPosts();
     }
-    renderPosts();
-  }, []);
 
-  // console.log("all posts -->", allPosts);
+    async function renderOneUserPosts() {
+      await getUserPosts(username);
+    }
+    username ? renderOneUserPosts() : renderAllPosts();
+
+    return () => {
+      postDispatch({ type: GET_ALL_POSTS, payload: null });
+
+      postDispatch({ type: ONE_USER_POSTS, payload: null });
+    };
+  }, [showPopup]);
+
+  console.log("one user's posts --> ", oneUserPosts);
+  console.log("all posts --> ", allPosts);
   // console.log("Post comp --> ", loggedInUser);
   // console.log(username);
 
@@ -28,11 +47,40 @@ function PostsComponent() {
     <>
       <h3 className=" text-2xl text-center uppercase ">Posts</h3>
 
+      {isOwner && (
+        <div className="w-[85%] mx-auto mt-8">
+
+        <button
+          className="btn w-full justify-start pl-8 text-xl font-normal"
+          onClick={() =>
+            postDispatch({ type: SHOW_CREATE_POST_POPUP, payload: true })
+          }
+          >
+          Share your thoughts...
+        </button>
+          </div>
+      )}
+
       <div className="flex flex-col items-center">
-        {allPosts &&
-          allPosts.map((x) => {
-            return <OnePost key={x._id} {...x} />;
-          })}
+        {username
+          ? oneUserPosts &&
+            oneUserPosts.map((x) => {
+              return (
+                <OnePost
+                  key={x._id}
+                  {...x}
+                  username={username}
+                  giveLike={giveLike}
+                  isOwner={isOwner}
+                  deletePost={deletePost}
+                  getUserPosts={getUserPosts}
+                />
+              );
+            })
+          : allPosts &&
+            allPosts.map((x) => {
+              return <OnePost key={x._id} {...x} giveLike={giveLike} />;
+            })}
       </div>
     </>
   );

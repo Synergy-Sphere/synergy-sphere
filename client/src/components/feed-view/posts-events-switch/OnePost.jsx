@@ -10,23 +10,41 @@ function OnePost({
   createdAt,
   comments,
   likes,
+  giveLike,
+  username,
+
+  isOwner,
+  deletePost,
+
+  getUserPosts
 }) {
   const { fullName: creatorName, profilePic: creatorPic } = createdBy;
 
-  const { giveLike } = usePost();
-
   async function handleLiking() {
-    await giveLike(postId);
+    await giveLike(postId, username);
+  }
+
+  async function handleDeletePost() {
+    await deletePost(postId);
+    await getUserPosts(username)
   }
   return (
     <div className="w-[85%] flex flex-col justify-between rounded-r-lg border-2 border-blue-300 m-4 p-4 min-h-[20rem] ">
-      <div className="flex items-center gap-4 border-b">
-        <img
-          src={creatorPic || profileAvatar}
-          alt=""
-          className="w-8 h-8 rounded-full"
-        />
-        <span>{creatorName}</span>
+      <div className="flex items-center justify-between border-b pb-4">
+        <div className="flex items-center gap-4 ">
+          <img
+            src={creatorPic || profileAvatar}
+            alt=""
+            className="w-8 h-8 rounded-full"
+          />
+          <span>{creatorName}</span>
+        </div>
+
+        {isOwner && (
+          <button className="btn" onClick={handleDeletePost}>
+            D
+          </button>
+        )}
       </div>
 
       <div className="flex justify-center">{content}</div>

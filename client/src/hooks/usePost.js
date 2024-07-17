@@ -7,8 +7,9 @@ function usePost() {
   const [loading, setLoading] = useState(false);
   const { updateUser } = useAuthContext();
 
-  const { postDispatch, GET_ALL_POSTS } = usePostContext();
+  const { postDispatch, GET_ALL_POSTS, ONE_USER_POSTS } = usePostContext();
 
+  // (*) Create
   async function createPost(content) {
     setLoading(true);
 
@@ -39,7 +40,32 @@ function usePost() {
       setLoading(false);
     }
   }
+  // (*) Delete
+  async function deletePost(postId) {
+    try {
+      const settings = {
+        method: "DELETE",
+        credentials: "include",
+      };
 
+      const response = await fetch(
+        `http://localhost:5555/post/delete/${postId}`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const { message } = await response.json();
+      toast.success(message);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  // (*) Get All
   async function getAllPosts() {
     try {
       const response = await fetch("http://localhost:5555/post/getPosts", {
@@ -58,8 +84,29 @@ function usePost() {
       toast.error(error.message);
     }
   }
+  // (*) Get User's posts
+  async function getUserPosts(username) {
+    try {
+      const response = await fetch(
+        `http://localhost:5555/post/${username}/getUserPosts`,
+        {
+          credentials: "include",
+        }
+      );
 
-  async function giveLike(postId) {
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+      postDispatch({ type: ONE_USER_POSTS, payload: data });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  // (*) Give a like
+  async function giveLike(postId, username) {
     try {
       const settings = {
         method: "PATCH",
@@ -78,12 +125,26 @@ function usePost() {
 
       const data = await response.json();
 
-      postDispatch({ type: GET_ALL_POSTS, payload: data });
+      if (username) {
+        const filteredData = data.filter((x) => {
+          return x.createdBy.username === username;
+        });
+        postDispatch({ type: ONE_USER_POSTS, payload: filteredData });
+      } else {
+        postDispatch({ type: GET_ALL_POSTS, payload: data });
+      }
     } catch (error) {
       toast.error(error.message);
     }
   }
-  return { createPost, getAllPosts, giveLike, loading };
+  return {
+    createPost,
+    getAllPosts,
+    getUserPosts,
+    giveLike,
+    deletePost,
+    loading,
+  };
 }
 
 export default usePost;
