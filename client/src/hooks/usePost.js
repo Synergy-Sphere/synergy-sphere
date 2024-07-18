@@ -7,7 +7,8 @@ function usePost() {
   const [loading, setLoading] = useState(false);
   const { updateUser } = useAuthContext();
 
-  const { postDispatch, GET_ALL_POSTS, ONE_USER_POSTS } = usePostContext();
+  const { postDispatch, GET_ALL_POSTS, ONE_USER_POSTS, GET_ONE_POST } =
+    usePostContext();
 
   // (*) Create
   async function createPost(content) {
@@ -105,6 +106,30 @@ function usePost() {
       toast.error(error.message);
     }
   }
+
+  // (*) Get one post
+  async function getOnePost(postId) {
+    try {
+      const settings = {
+        credentials: "include",
+      };
+      const response = await fetch(
+        `http://localhost:5555/post/getOnePost/${postId}`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+
+      postDispatch({ type: GET_ONE_POST, payload: data });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
   // (*) Give a like
   async function giveLike(postId, username) {
     try {
@@ -138,11 +163,15 @@ function usePost() {
     }
   }
   return {
-    createPost,
     getAllPosts,
     getUserPosts,
-    giveLike,
+    getOnePost,
+
+    createPost,
     deletePost,
+
+    giveLike,
+
     loading,
   };
 }

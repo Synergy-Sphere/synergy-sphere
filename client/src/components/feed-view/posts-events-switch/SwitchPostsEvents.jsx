@@ -3,7 +3,7 @@ import { useState } from "react";
 import PostsComponent from "./PostsComponent";
 import EventsComponent from "./EventsComponent";
 
-function SwitchPostsEvents({ isOwner }) {
+function SwitchPostsEvents({ isOwner, feedView }) {
   const [showEvents, setShowEvents] = useState(false);
   return (
     <>
@@ -21,7 +21,7 @@ function SwitchPostsEvents({ isOwner }) {
           Posts
         </button>
       </div>
-      {showEvents ? <EventsComponent /> : <PostsComponent isOwner={isOwner} />}
+      {showEvents ? <EventsComponent /> : <PostsComponent isOwner={isOwner} feedView={feedView}/>}
     </>
   );
 }

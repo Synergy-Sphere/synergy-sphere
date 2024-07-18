@@ -11,8 +11,9 @@ export function usePostContext() {
 function PostContextProvider({ children }) {
   const [postState, postDispatch] = useReducer(postReducer, postInitialState);
 
-
   // console.log("post state --> ", postState);
+  console.log("PostContext onePost -->", postState.onePost);
+
   return (
     <PostContext.Provider value={{ ...postState, ...POST_TYPES, postDispatch }}>
       {children}
