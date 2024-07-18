@@ -126,7 +126,7 @@ export const deletePost = async (req, res, next) => {
         });
 
         res.json({
-          message: `Post was deleted`,
+          message: `Your post was deleted successfully`,
         });
       } catch {
         next(createError(500, "Server error"));
@@ -411,6 +411,49 @@ export async function getUserPosts(req, res, next) {
 
 export async function getLikesOnEachPost(req, res, next) {
   try {
+  } catch (error) {
+    next(createError(500, "Server error"));
+  }
+}
+
+export async function getOnePost(req, res, next) {
+  const { id } = req.params;
+  const tokenUserId = req.user.id;
+
+  try {
+    // const foundPost = await Post.findById(id)
+    //   .populate("createdBy", {
+    //     fullName: 1,
+    //     profilePic: 1,
+    //   })
+    //   .populate("likes", { fullName: 1, _id: 0 })
+    //   .populate("comments", {
+    //     content: 1,
+    //     commentedBy: 1,
+    //     likes: 1,
+    //   });
+
+    if (!tokenUserId) return next(createError(403, "Unauthorized"));
+
+    const foundPost = await Post.findById(id)
+      .populate({
+        path: "createdBy",
+        select: { fullName: 1, profilePic: 1 },
+      })
+      .populate({
+        path: "likes",
+        select: { fullName: 1, _id: 0 },
+      })
+      .populate({
+        path: "comments",
+        select: { content: 1, commentedBy: 1, likes: 1 },
+        populate: {
+          path: "commentedBy likes",
+          select: "fullName profilePic",
+        },
+      });
+
+    res.json(foundPost);
   } catch (error) {
     next(createError(500, "Server error"));
   }

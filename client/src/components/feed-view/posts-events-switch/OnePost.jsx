@@ -13,12 +13,18 @@ function OnePost({
   giveLike,
   username,
 
+  feedView,
+
   isOwner,
   deletePost,
 
-  getUserPosts
+  getUserPosts,
+
+  getOnePost,
 }) {
   const { fullName: creatorName, profilePic: creatorPic } = createdBy;
+
+  const { SHOW_ONE_POST_POPUP, postDispatch } = usePostContext();
 
   async function handleLiking() {
     await giveLike(postId, username);
@@ -26,7 +32,12 @@ function OnePost({
 
   async function handleDeletePost() {
     await deletePost(postId);
-    await getUserPosts(username)
+    await getUserPosts(username);
+  }
+
+  async function handleShowOnePostPopup() {
+    postDispatch({ type: SHOW_ONE_POST_POPUP, payload: true });
+    await getOnePost(postId);
   }
   return (
     <div className="w-[85%] flex flex-col justify-between rounded-r-lg border-2 border-blue-300 m-4 p-4 min-h-[20rem] ">
@@ -51,7 +62,7 @@ function OnePost({
 
       <div className="pt-2 border-t flex justify-around">
         <div>
-          <button onClick={handleLiking}>
+          <button onClick={handleLiking} className="btn w-40">
             {likes.length > 0 && likes.length} Likes
           </button>
 
@@ -61,7 +72,14 @@ function OnePost({
             }
           </span>
         </div>
-        <div>comments</div>
+        <button
+          className="btn w-40"
+          onClick={() => {
+            feedView && handleShowOnePostPopup();
+          }}
+        >
+          comments
+        </button>
       </div>
     </div>
   );

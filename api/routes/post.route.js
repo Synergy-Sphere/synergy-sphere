@@ -5,7 +5,7 @@ import {
   editPost,
   deletePost,
   likePost,
-  // removeLikeFromPost,
+  getOnePost,
   addCommentToPost,
   editComment,
   removeComment,
@@ -36,4 +36,5 @@ router.patch("/:id/removeComment/:commentId", removeComment);
 
 router.get("/getPosts", getAllPosts);
 router.get("/:username/getUserPosts", getUserPosts);
+router.get("/getOnePost/:id", getOnePost);
 export default router;

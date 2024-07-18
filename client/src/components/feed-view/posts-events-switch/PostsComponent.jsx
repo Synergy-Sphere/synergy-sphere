@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { usePostContext } from "../../../contexts/postContext/PostContext";
 import OnePost from "./OnePost";
 
-function PostsComponent({ isOwner }) {
+function PostsComponent({ isOwner, feedView }) {
   const { username } = useParams();
 
   const { loggedInUser } = useAuthContext();
@@ -19,7 +19,8 @@ function PostsComponent({ isOwner }) {
     SHOW_CREATE_POST_POPUP,
   } = usePostContext();
 
-  const { getAllPosts, getUserPosts, giveLike, deletePost } = usePost();
+  const { getAllPosts, getUserPosts, giveLike, deletePost, getOnePost } =
+    usePost();
 
   useEffect(() => {
     async function renderAllPosts() {
@@ -38,8 +39,8 @@ function PostsComponent({ isOwner }) {
     };
   }, [showPopup]);
 
-  console.log("one user's posts --> ", oneUserPosts);
-  console.log("all posts --> ", allPosts);
+  // console.log("one user's posts --> ", oneUserPosts);
+  // console.log("all posts --> ", allPosts);
   // console.log("Post comp --> ", loggedInUser);
   // console.log(username);
 
@@ -49,16 +50,15 @@ function PostsComponent({ isOwner }) {
 
       {isOwner && (
         <div className="w-[85%] mx-auto mt-8">
-
-        <button
-          className="btn w-full justify-start pl-8 text-xl font-normal"
-          onClick={() =>
-            postDispatch({ type: SHOW_CREATE_POST_POPUP, payload: true })
-          }
+          <button
+            className="btn w-full justify-start pl-8 text-xl font-normal"
+            onClick={() =>
+              postDispatch({ type: SHOW_CREATE_POST_POPUP, payload: true })
+            }
           >
-          Share your thoughts...
-        </button>
-          </div>
+            Share your thoughts...
+          </button>
+        </div>
       )}
 
       <div className="flex flex-col items-center">
@@ -67,8 +67,8 @@ function PostsComponent({ isOwner }) {
             oneUserPosts.map((x) => {
               return (
                 <OnePost
-                  key={x._id}
                   {...x}
+                  key={x._id}
                   username={username}
                   giveLike={giveLike}
                   isOwner={isOwner}
@@ -79,7 +79,16 @@ function PostsComponent({ isOwner }) {
             })
           : allPosts &&
             allPosts.map((x) => {
-              return <OnePost key={x._id} {...x} giveLike={giveLike} />;
+              return (
+                <OnePost
+                  {...x}
+                  key={x._id}
+                  giveLike={giveLike}
+                  feedView={feedView}
+
+                  getOnePost={getOnePost}
+                />
+              );
             })}
       </div>
     </>
