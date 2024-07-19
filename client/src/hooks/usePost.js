@@ -162,6 +162,28 @@ function usePost() {
       toast.error(error.message);
     }
   }
+
+  // (*) Comment on a post
+  async function commentOnPost(postId, commentContent) {
+    // /addComment/:id/
+    try {
+      const settings = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "Application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ commentContent }),
+      };
+
+      const response = await fetch(
+        `http://localhost:5555/post/addComment/${postId}`,
+        settings
+      );
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
   return {
     getAllPosts,
     getUserPosts,
