@@ -21,7 +21,7 @@ function SwitchPostsEvents({ isOwner, feedView }) {
           Posts
         </button>
       </div>
-      {showEvents ? <EventsComponent /> : <PostsComponent isOwner={isOwner} feedView={feedView}/>}
+      {showEvents ? <EventsComponent isOwner={isOwner} feedView={feedView} /> : <PostsComponent isOwner={isOwner} feedView={feedView}/>}
     </>
   );
 }

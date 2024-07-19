@@ -10,6 +10,7 @@ import { SuggestedFriends, SwitchPostsEvents } from "../components";
 import { grayBg, profileAvatar } from "../assets";
 import { CreatePostPopup } from "../components/popup-windows";
 import { usePostContext } from "../contexts/postContext/PostContext";
+import { usePost } from "../hooks";
 
 function UserProfile() {
   const [userInfo, setUserInfo] = useState(null);
@@ -23,7 +24,6 @@ function UserProfile() {
   const { loggedInUser } = useAuthContext();
 
   const isOwner = loggedInUser.username === username;
-
 
   // console.log(isOwner);
 
@@ -44,9 +44,10 @@ function UserProfile() {
       }
     }
     getUserInfo();
-  }, []);
+    // herr Bakumenko added username
+  }, [username]);
 
-  // console.log("visited user info -->", userInfo);
+  console.log("visited user info -->", userInfo);
   return (
     <>
       <div className=" relative">
