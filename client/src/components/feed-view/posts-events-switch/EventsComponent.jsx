@@ -1,33 +1,64 @@
 import { useEventContext } from "../../../contexts/eventContext/EventContext";
 import useEvent from "../../../hooks/useEvent";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import OneEvent from "./OneEvent";
 
-function EventsComponent() {
-  const { allEvents } = useEventContext();
-  const { getAllEvents } = useEvent();
+function EventsComponent({ isOwner, feedView }) {
+  const { username } = useParams();
+
+  const {
+    allEvents,
+    oneUserEvents,
+    eventDispatch,
+    GET_ALL_EVENTS,
+    ONE_USER_EVENTS,
+  } = useEventContext();
+
+  const { getAllEvents, getUserEvents } = useEvent();
 
   useEffect(() => {
-    async function renderEvents() {
+    async function renderAllEvents() {
       await getAllEvents();
     }
-    renderEvents();
-  }, []);
+
+    async function renderOneUserEvents() {
+      await getUserEvents(username);
+    }
+
+    username ? renderOneUserEvents() : renderAllEvents();
+
+    return () => {
+      eventDispatch({ type: GET_ALL_EVENTS, payload: null });
+
+      eventDispatch({ type: ONE_USER_EVENTS, payload: null });
+    };
+  }, [username]);
 
   console.log("all events-->", allEvents);
   return (
     <>
       <h3 className=" text-2xl text-center uppercase ">Events</h3>
 
-      {allEvents?.map(x=>{
-        return <div key={x._id} className="flex flex-col w-full justify-center m-4 border-2 border-gray-600">
-          <p>Title: {x.title}</p>
-          <p>Description: {x.description}</p>
-          <p>Location: {x.location}</p>
-          <p>Start date : {x.startDate}</p>
-          <p>End date : {x.endDate}</p>
-          <p>{x.eventType}</p>
-        </div>
-      })}
+      <div className="flex flex-wrap justify-around items-center">
+        {username
+          ? oneUserEvents &&
+            oneUserEvents?.map((x) => {
+              return (
+                <OneEvent
+                  {...x}
+                  key={x._id}
+                  username={username}
+                  isOwner={isOwner}
+                  getUserEvents={getUserEvents}
+                />
+              );
+            })
+          : allEvents &&
+            allEvents.map((x) => {
+              return <OneEvent {...x} key={x._id} feedView={feedView} />;
+            })}
+      </div>
     </>
   );
 }

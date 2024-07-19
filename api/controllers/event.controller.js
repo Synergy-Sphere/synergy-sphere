@@ -234,7 +234,9 @@ export const declineEvent = async (req, res, next) => {
       };
 
       const event = await Event.findById(id);
-      const newListOfParticipants = event.participants.filter(participant => participant.toString() !== tokenUserId);
+      const newListOfParticipants = event.participants.filter(
+        (participant) => participant.toString() !== tokenUserId
+      );
 
       const updatedEvent = await Event.findByIdAndUpdate(
         id,
@@ -247,7 +249,9 @@ export const declineEvent = async (req, res, next) => {
       await updatedEvent.populate("participants");
 
       foundUser = await User.findById(tokenUserId);
-      const filteredEventsOfUser = foundUser.events.filter(event => event.toString() !== id);
+      const filteredEventsOfUser = foundUser.events.filter(
+        (event) => event.toString() !== id
+      );
 
       await User.findByIdAndUpdate(tokenUserId, {
         $set: { events: filteredEventsOfUser },
@@ -258,12 +262,51 @@ export const declineEvent = async (req, res, next) => {
   }
 };
 
-
 export async function getAllEvents(req, res, next) {
   try {
     const allEvents = await Event.find();
 
-    res.json(allEvents);
+    const populatedEvents = await Promise.all(
+      allEvents
+        .filter((event) => event.deletedAt === null)
+        .map(async (x) => {
+          await x.populate("createdBy", {
+            fullName: 1,
+            profilePic: 1,
+            _id:0
+          });
+
+          // await x.populate("likes", { fullName: 1, _id: 0 });
+          return x; // return the populated event
+        })
+    );
+    res.json(populatedEvents);
+  } catch {
+    next(createError(500, "Server error"));
+  }
+}
+
+export async function getUserEvents(req, res, next) {
+  const { username } = req.params;
+
+  try {
+    const foundUser = await User.findOne({ username });
+    console.log(foundUser._id);
+    const oneUserEvents = await Event.find({ createdBy: foundUser._id });
+
+    const populatedOneUserEvents = await Promise.all(
+      oneUserEvents
+        .filter((event) => event.deletedAt === null)
+        .map(async (x) => {
+          await x.populate("createdBy", {
+            fullName: 1,
+            profilePic: 1,
+          });
+          return x;
+        })
+    );
+
+    res.json(populatedOneUserEvents);
   } catch {
     next(createError(500, "Server error"));
   }
@@ -282,7 +325,6 @@ export async function getAllEvents(req, res, next) {
 //     next(createError(500, "Server error"));
 //   }
 // }
-
 
 // export const buyTicket = (req,res,next) => {
 

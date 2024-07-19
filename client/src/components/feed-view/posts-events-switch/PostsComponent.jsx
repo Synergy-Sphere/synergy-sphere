@@ -37,7 +37,8 @@ function PostsComponent({ isOwner, feedView }) {
 
       postDispatch({ type: ONE_USER_POSTS, payload: null });
     };
-  }, [showPopup]);
+        // herr Bakumenko added username
+  }, [showPopup, username]);
 
   // console.log("one user's posts --> ", oneUserPosts);
   // console.log("all posts --> ", allPosts);
