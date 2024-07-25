@@ -23,35 +23,45 @@ const postSchema = new Schema(
       ref: "User",
       required: true,
     },
+    // comments: {
+    //   type: [
+    //     {
+    //       content: {
+    //         type: String,
+    //         required: true,
+    //         // default: "",
+    //       },
+    //       commentedBy: {
+    //         type: mongoose.ObjectId,
+    //         ref: "User",
+    //         required: true,
+    //       },
+    //       likes: {
+    //         type: [
+    //           {
+    //             type: mongoose.ObjectId,
+    //             ref: "User",
+    //             required: true,
+    //           },
+    //         ],
+    //         default: [],
+    //       },
+    //       createdAt: {
+    //         type: Date,
+    //         default: Date.now,
+    //       },
+    //     },
+    //   ],
+    //   default: [],
+    // },
     comments: {
       type: [
         {
-          content: {
-            type: String,
-            required: true,
-            // default: "",
-          },
-          commentedBy: {
-            type: mongoose.ObjectId,
-            ref: "User",
-            required: true,
-          },
-          likes: {
-            type: [
-              {
-                type: mongoose.ObjectId,
-                ref: "User",
-                required: true,
-              },
-            ], // we push userIds to it
-            // required: true,
-            default: [],
-          },
-          createdAt: Date,
-          updatedAt: Date,
+          type: mongoose.ObjectId,
+          ref: "Comment",
+          required: true,
         },
       ],
-      // required: true,
       default: [],
     },
     images: {

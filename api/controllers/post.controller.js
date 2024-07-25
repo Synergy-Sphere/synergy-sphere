@@ -242,7 +242,24 @@ export const addCommentToPost = async (req, res, next) => {
           $push: { comments: newComment },
         },
         options
-      );
+      )
+        // ! populate Added by Herr Mekael
+        .populate({
+          path: "createdBy",
+          select: { fullName: 1, profilePic: 1 },
+        })
+        .populate({
+          path: "likes",
+          select: { fullName: 1, _id: 0 },
+        })
+        .populate({
+          path: "comments",
+          select: { content: 1, commentedBy: 1, likes: 1, createdAt: 1 },
+          populate: {
+            path: "commentedBy likes",
+            select: "fullName profilePic ",
+          },
+        });
 
       res.status(200).json(updatedPost);
     } catch {
@@ -421,18 +438,6 @@ export async function getOnePost(req, res, next) {
   const tokenUserId = req.user.id;
 
   try {
-    // const foundPost = await Post.findById(id)
-    //   .populate("createdBy", {
-    //     fullName: 1,
-    //     profilePic: 1,
-    //   })
-    //   .populate("likes", { fullName: 1, _id: 0 })
-    //   .populate("comments", {
-    //     content: 1,
-    //     commentedBy: 1,
-    //     likes: 1,
-    //   });
-
     if (!tokenUserId) return next(createError(403, "Unauthorized"));
 
     const foundPost = await Post.findById(id)
@@ -446,7 +451,7 @@ export async function getOnePost(req, res, next) {
       })
       .populate({
         path: "comments",
-        select: { content: 1, commentedBy: 1, likes: 1 },
+        select: { content: 1, commentedBy: 1, likes: 1, createdAt: 1 },
         populate: {
           path: "commentedBy likes",
           select: "fullName profilePic",
@@ -455,6 +460,46 @@ export async function getOnePost(req, res, next) {
 
     res.json(foundPost);
   } catch (error) {
+    next(createError(500, "Server error"));
+  }
+}
+
+export async function addLikesToComment(req, res, next) {
+  const { postId, commentId } = req.params;
+  const tokenUserId = req.user.id;
+  if (!tokenUserId) return next(createError(403, "Unauthorized"));
+
+  try {
+    const foundPost = await Post.findById(postId);
+    if (!foundPost) {
+      throw new Error(`Post not found with id ${postId}`);
+    }
+
+    const commentIndex = foundPost.comments.findIndex(
+      (comment) => comment._id.toString() === commentId
+    );
+    if (commentIndex === -1) {
+      throw new Error(`Comment not found with id ${commentId}`);
+    }
+
+    const foundComment = foundPost.comments[commentIndex];
+    const alreadyLiked = foundComment.likes.find(
+      (like) => like.toString() === tokenUserId
+    );
+
+    if (alreadyLiked) {
+      foundComment.likes = foundComment.likes.filter(
+        (like) => like.toString() !== tokenUserId
+      );
+    } else {
+      foundComment.likes.push(tokenUserId);
+    }
+
+    await foundPost.save(); // Save the updated post document
+
+    res.json(foundPost);
+  } catch (error) {
+    console.error(error); // Log the error
     next(createError(500, "Server error"));
   }
 }
