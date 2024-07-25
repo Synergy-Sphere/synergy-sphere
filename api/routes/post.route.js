@@ -11,6 +11,7 @@ import {
   removeComment,
   getAllPosts,
   getUserPosts,
+  addLikesToComment,
 } from "../controllers/post.controller.js";
 
 const router = Router();
@@ -37,4 +38,8 @@ router.patch("/:id/removeComment/:commentId", removeComment);
 router.get("/getPosts", getAllPosts);
 router.get("/:username/getUserPosts", getUserPosts);
 router.get("/getOnePost/:id", getOnePost);
+
+// !----------------------
+router.patch("/:postId/likeComment/:commentId", addLikesToComment);
+
 export default router;
