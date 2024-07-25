@@ -1,11 +1,13 @@
 export const EVENT_TYPES = {
   GET_ALL_EVENTS: "get-all-events",
-  ONE_USER_EVENTS: "one-user-events"
+  ONE_USER_EVENTS: "one-user-events",
+  GET_SUGGESTED_EVENTS: "get-suggested-events"
 };
 
 export const eventInitialState = {
   allEvents: null,
-  oneUserEvents: null
+  oneUserEvents: null,
+  suggestedEvents:null
 };
 
 export function eventReducer(eventState, { type, payload }) {
@@ -20,6 +22,12 @@ export function eventReducer(eventState, { type, payload }) {
       return {
         ...eventState,
         oneUserEvents: payload,
+      };
+    }
+    case EVENT_TYPES.GET_SUGGESTED_EVENTS: {
+      return {
+        ...eventState,
+        suggestedEvents: payload,
       };
     }
 

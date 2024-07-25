@@ -1,21 +1,23 @@
 import { useEventContext } from "../../../contexts/eventContext/EventContext";
 import useEvent from "../../../hooks/useEvent";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import OneEvent from "./OneEvent";
 
 function EventsComponent({ isOwner, feedView }) {
-  const { username } = useParams();
+  const { id: loggedInUserId, username } = useParams();
 
   const {
     allEvents,
     oneUserEvents,
+    suggestedEvents,
     eventDispatch,
     GET_ALL_EVENTS,
     ONE_USER_EVENTS,
+    GET_SUGGESTED_EVENTS,
   } = useEventContext();
 
-  const { getAllEvents, getUserEvents } = useEvent();
+  const { getAllEvents, getUserEvents, getSuggestedEvents, deleteEvent } = useEvent();
 
   useEffect(() => {
     async function renderAllEvents() {
@@ -26,12 +28,18 @@ function EventsComponent({ isOwner, feedView }) {
       await getUserEvents(username);
     }
 
-    username ? renderOneUserEvents() : renderAllEvents();
+    async function renderSuggestedEvents() {
+      await getSuggestedEvents(loggedInUserId);
+    }
+
+    username ? renderOneUserEvents() : renderSuggestedEvents();
 
     return () => {
       eventDispatch({ type: GET_ALL_EVENTS, payload: null });
 
       eventDispatch({ type: ONE_USER_EVENTS, payload: null });
+
+      eventDispatch({ type: GET_SUGGESTED_EVENTS, payload: null });
     };
   }, [username]);
 
@@ -39,7 +47,7 @@ function EventsComponent({ isOwner, feedView }) {
   return (
     <>
       <h3 className=" text-2xl text-center uppercase ">Events</h3>
-
+      <Link to={`createEvent`}>Create Event</Link>
       <div className="flex flex-wrap justify-around items-center">
         {username
           ? oneUserEvents &&
@@ -51,11 +59,12 @@ function EventsComponent({ isOwner, feedView }) {
                   username={username}
                   isOwner={isOwner}
                   getUserEvents={getUserEvents}
+                  deleteEvent={deleteEvent}
                 />
               );
             })
-          : allEvents &&
-            allEvents.map((x) => {
+          : suggestedEvents &&
+            suggestedEvents.map((x) => {
               return <OneEvent {...x} key={x._id} feedView={feedView} />;
             })}
       </div>
