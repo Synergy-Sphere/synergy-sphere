@@ -7,8 +7,16 @@ function usePost() {
   const [loading, setLoading] = useState(false);
   const { updateUser } = useAuthContext();
 
-  const { postDispatch, GET_ALL_POSTS, ONE_USER_POSTS, GET_ONE_POST } =
-    usePostContext();
+  const {
+    postDispatch,
+
+    GET_ALL_POSTS,
+    ONE_USER_POSTS,
+    GET_ONE_POST,
+
+    GET_ONE_COMMENT,
+    GET_ALL_COMMENTS,
+  } = usePostContext();
 
   // (*) Create
   async function createPost(content) {
@@ -41,7 +49,7 @@ function usePost() {
       setLoading(false);
     }
   }
-  // (*) Delete
+  // (*) Delete a Post
   async function deletePost(postId) {
     try {
       const settings = {
@@ -80,7 +88,6 @@ function usePost() {
       const data = await response.json();
 
       postDispatch({ type: GET_ALL_POSTS, payload: data });
-      // console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
@@ -173,24 +180,137 @@ function usePost() {
           "Content-Type": "Application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ commentContent }),
+        body: JSON.stringify({ content: commentContent }),
       };
-
       const response = await fetch(
-        `http://localhost:5555/post/addComment/${postId}`,
+        `http://localhost:5555/comment/add-comment/${postId}`,
         settings
       );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+
+      postDispatch({ type: GET_ONE_POST, payload: data });
     } catch (error) {
       toast.error(error.message);
     }
   }
+
+  // (*) Get all comments
+  async function getAllComments(postId) {
+    try {
+      const settings = {
+        credentials: "include",
+      };
+      const response = await fetch(
+        `http://localhost:5555/comment/get-all/${postId}`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+      postDispatch({ type: GET_ALL_COMMENTS, payload: data });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  // (*) Get one comment
+  async function getOneComment(commentId) {
+    try {
+      const settings = {
+        credentials: "include",
+      };
+      const response = await fetch(
+        `http://localhost:5555/comment/get-one-comment/${commentId}`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+
+      postDispatch({ type: GET_ONE_COMMENT, payload: data });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  // (*) Give a like to a comment
+  async function addLikesToComment(postId, commentId) {
+    try {
+      const settings = {
+        method: "PATCH",
+        credentials: "include",
+      };
+
+      const response = await fetch(
+        `http://localhost:5555/comment/${postId}/like-one-comment/${commentId}`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+
+      postDispatch({ type: GET_ALL_COMMENTS, payload: data });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  // (*) Delete a Comment
+
+  async function deleteOneComment(commentId) {
+    try {
+      const settings = {
+        method: "DELETE",
+        credentials: "include",
+      };
+      const response = await fetch(
+        `http://localhost:5555/comment/delete/${commentId}`,
+        settings
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+      }
+
+      const { message } = await response.json();
+      toast.success(message);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
   return {
     getAllPosts,
     getUserPosts,
     getOnePost,
 
+    getAllComments,
+    getOneComment,
+
     createPost,
     deletePost,
+
+    commentOnPost,
+    addLikesToComment,
+    deleteOneComment,
 
     giveLike,
 
