@@ -12,6 +12,10 @@ import {
 
 import { useAuthContext } from "./contexts/authContext/AuthContext";
 import { useState } from "react";
+import CreateEvent from "./views/CreateEvent";
+import SinglePageEvent from "./views/SinglePageEvent";
+
+
 function App() {
   const [canNavToFeed, setCanNavToFeed] = useState(false);
   const { loggedInUser } = useAuthContext();
@@ -29,7 +33,11 @@ function App() {
         {loggedInUser && (
           <Route path="/:id/feed" element={<FeedLayout />}>
             <Route index element={<Feed />} />
-            <Route path="/:id/feed/:username" element={<UserProfile />} />
+            <Route path=":username" element={<UserProfile />} />
+
+            <Route path="createEvent" element={<CreateEvent />} />
+            <Route path="event/:eventId" element={<SinglePageEvent />} />
+
             <Route />
           </Route>
         )}

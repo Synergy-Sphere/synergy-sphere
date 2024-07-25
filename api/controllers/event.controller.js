@@ -312,6 +312,38 @@ export async function getUserEvents(req, res, next) {
   }
 }
 
+export async function getSuggestedEvents(req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const foundUser = await User.findById(id);
+    // console.log(foundUser);
+    const suggestedEvents = await Event.find({
+      eventType: { $elemMatch: { $in: foundUser.interests } }
+    });
+
+    res.json(suggestedEvents);
+  } catch {
+    next(createError(500, "Server error"));
+  }
+}
+
+export async function getSingleEvent(req,res,next) {
+  const {eventId} = req.params;
+  console.log(eventId);
+  try {
+    const foundEvent = await Event.findById(eventId);
+    foundEvent.populate("createdBy", {
+      fullName:1,
+      username:1,
+      profilePic:1
+    })
+    res.json(foundEvent);
+  } catch (error) {
+    next(createError(500, "Server error"));
+  }
+}
+
 // export async function getUserEvents(req, res, next) {
 //   const { username } = req.params;
 
