@@ -151,22 +151,36 @@ const eventSchema = new Schema(
     tickets: {
       type: [
         {
-          price: {
-            type: String,
-            required: true,
-          },
-          numberOfTickets: {
-            type: Number,
-            required: true,
-          },
-          //   optional ticketType : "normal", "vip"
+          type: mongoose.ObjectId,
+          ref: "Ticket",
+          required: true,
         },
       ],
+      default: []
     },
   },
   { timestamps: true }
 );
 
+//! ==================================================================================
+
+// tickets: {
+//   type: [
+//     {
+//       price: {
+//         type: String,
+//         required: true,
+//       },
+//       numberOfTickets: {
+//         type: Number,
+//         required: true,
+//       },
+//       //   optional ticketType : "normal", "vip"
+//     },
+//   ],
+// },
+
+//! ========================================================================================
 // tickets: {
 //   type: [
 //     {

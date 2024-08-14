@@ -54,7 +54,7 @@ function OneEvent({
       <div className="flex justify-center">{eventType && eventType.map((type, i) => (
         <span key={i}> {type} </span>
       ) )}</div>
-     <Link to={`event/${eventId}`} element={<SinglePageEvent eventId={eventId}/>}>Read more</Link>
+     <Link to={`event/${eventId}`} element={<SinglePageEvent eventId={eventId} isOwner={isOwner}/>}>Read more</Link>
     </div>
   );
 }

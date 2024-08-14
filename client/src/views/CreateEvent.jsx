@@ -39,12 +39,13 @@ const eventTypes = [
 ];
 
 const CreateEvent = () => {
-
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [isPaid, setIsPaid] = useState(false);
+  const [tickets, setTickets] = useState({ quantity: "0", price: "0" });
   const nav = useNavigate();
 
-  const {loggedInUser} = useAuthContext();
+  const { loggedInUser } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,19 +58,36 @@ const CreateEvent = () => {
     const location = formData.get("location");
     const isPaid = formData.get("isPaid");
 
-    console.log(title, description, startDate, endDate, eventType, location, isPaid);
+    console.log(
+      title,
+      description,
+      startDate,
+      endDate,
+      eventType,
+      location,
+      isPaid
+    );
 
     try {
       const response = await fetch("http://localhost:5555/event/create", {
-        method:"POST",
-        body: JSON.stringify({title, description, startDate, endDate, eventType, location, isPaid}),
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          description,
+          startDate,
+          endDate,
+          eventType,
+          location,
+          isPaid,
+          tickets
+        }),
         headers: {
           "Content-Type": "application/JSON",
         },
-        credentials:"include"
+        credentials: "include",
       });
       if (!response.ok) {
-        const {error} = await response.json();
+        const { error } = await response.json();
         throw new Error(error.message);
       }
 
@@ -79,12 +97,16 @@ const CreateEvent = () => {
     } catch (error) {
       console.log(error.message);
     }
-
   };
+
+  console.log(tickets);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <form onSubmit={handleSubmit} className="w-[80%] mx-auto my-20 flex flex-col items-center gap-12">
+      <form
+        onSubmit={handleSubmit}
+        className="w-[80%] mx-auto my-20 flex flex-col items-center gap-12"
+      >
         <label htmlFor="">Title</label>
         <input
           type="text"
@@ -101,31 +123,52 @@ const CreateEvent = () => {
           //   dispatch({ type: types, payload: newValue });
           // }}
           renderInput={(params) => (
-            <TextField {...params} label="Type of Event" variant="outlined" name="eventType" />
+            <TextField
+              {...params}
+              label="Type of Event"
+              variant="outlined"
+              name="eventType"
+            />
           )}
         />
         <label htmlFor="">Start Date</label>
-        <DateTimePicker name="startDate"
+        <DateTimePicker
+          name="startDate"
           value={startDate}
           onChange={(newValue) => setStartDate(newValue)}
         />
         <label htmlFor="">End Date</label>
-        <DateTimePicker name="endDate"
+        <DateTimePicker
+          name="endDate"
           value={endDate}
           onChange={(newValue) => setEndDate(newValue)}
         />
         <label htmlFor="">Location</label>
         <input type="text" className="outline" name="location" />
-        {/* <label htmlFor="" id="isPaid">Paid or Costless</label>
-        <input type="radio" name="isPaid" id="isPaid" value={true} />
-        <input type="radio" name="isPaid" id="isPaid" value={false}/> */}
         <label htmlFor="isPaid">Paid or Free</label>
-        <select name="isPaid" id="isPaid">
+        <select
+          name="isPaid"
+          id="isPaid"
+          value={isPaid}
+          onChange={(e) => setIsPaid(e.target.value)}
+        >
           <option value={true}>Paid</option>
           <option value={false}>Free</option>
         </select>
+        {isPaid && (
+          <div>
+            <label htmlFor="quantity">Quantity of tickets</label>
+            <input type="text" name="quantity" value={tickets.quantity} onChange={(e)=> setTickets({...tickets, quantity: e.target.value})}/>
+            <label htmlFor="price">Price per Ticket</label>
+            <input type="text" name="price" value={tickets.price} onChange={(e)=> setTickets({...tickets, price: e.target.value})} />
+          </div>
+        )}
         <label htmlFor="">Description</label>
-        <textarea name="description" id="" className="outline resize-none"></textarea>
+        <textarea
+          name="description"
+          id=""
+          className="outline resize-none"
+        ></textarea>
         <button type="submit">Create Event</button>
       </form>
     </LocalizationProvider>
