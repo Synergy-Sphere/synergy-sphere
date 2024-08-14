@@ -8,6 +8,7 @@ import {
 } from "../components";
 import { useAuthContext } from "../contexts/authContext/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
 
 function CustomizeProfile({ setCanNavToFeed }) {
   const {
@@ -21,6 +22,7 @@ function CustomizeProfile({ setCanNavToFeed }) {
     SET_USER_INTERESTS,
   } = useUserContext();
 
+  const { registerDispatch, REGISTER_TYPES } = useRegisterContext();
   const { updateUser } = useAuthContext();
 
   const { id } = useParams();
@@ -58,10 +60,16 @@ function CustomizeProfile({ setCanNavToFeed }) {
         idParams={id}
       />
       <button
-      className="btn m-4"
+        className="btn m-4"
         onClick={() => {
-          setCanNavToFeed(true);
-          nav(`/${id}/feed`);
+          // setCanNavToFeed(true);
+          // nav(`/${id}/feed`);
+
+          registerDispatch({
+            type: REGISTER_TYPES.TO_CUSTOMIZE_PROFILE,
+            payload: false,
+          });
+          nav("/");
         }}
       >
         READY

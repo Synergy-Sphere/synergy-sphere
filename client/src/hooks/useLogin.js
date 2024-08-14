@@ -44,8 +44,10 @@ function useLogin() {
       const data = await response.json();
       await updateUser(data);
 
-      const userId = data._id;
-      nav(`/${userId}/feed`);
+      // ! Try
+      // * Works -- when a user is logged in it will nav to the Feed view
+      // const userId = data._id;
+      // nav(`/${userId}/feed`);
     } catch (error) {
       toast.error(error.message);
     } finally {

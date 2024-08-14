@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useAuthContext } from "../contexts/authContext/AuthContext";
 
 import { SuggestedFriends, SwitchPostsEvents } from "../components";
+import { OnePostPopup } from "../components/popup-windows";
 
 import { grayBg, profileAvatar } from "../assets";
 import { CreatePostPopup } from "../components/popup-windows";
@@ -17,9 +18,9 @@ function UserProfile() {
 
   // const [ showPopup, setShowPopup ] = useState(false)
 
-  const { showPopup } = usePostContext();
+  const { showPopup, commentsPopup } = usePostContext();
 
-  const { id, username } = useParams();
+  const { username } = useParams();
 
   const { loggedInUser } = useAuthContext();
 
@@ -44,14 +45,20 @@ function UserProfile() {
       }
     }
     getUserInfo();
+    window.scrollTo(0, 0);
     // herr Bakumenko added username
   }, [username]);
 
   console.log("visited user info -->", userInfo);
   return (
     <>
+      {commentsPopup && (
+        <div className=" w-full h-[100vh] flex justify-center items-center fixed z-30 opacity-100 blur-0 translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] ">
+          <OnePostPopup />
+        </div>
+      )}
       <div className=" relative">
-        { showPopup && <CreatePostPopup />}
+        {showPopup && <CreatePostPopup />}
         <section
           className={`w-[90vw] mx-auto 
         ${showPopup && " blur opacity-90"}

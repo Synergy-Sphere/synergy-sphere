@@ -1,6 +1,7 @@
 import { SuggestedFriends, SwitchPostsEvents } from "../components";
 import { OnePostPopup } from "../components/popup-windows";
 import { usePostContext } from "../contexts/postContext/PostContext";
+
 function Feed() {
   const { commentsPopup } = usePostContext();
 

@@ -75,7 +75,8 @@ function OnePost({
         <button
           className="btn w-40"
           onClick={() => {
-            feedView && handleShowOnePostPopup();
+            // feedView && handleShowOnePostPopup();
+            handleShowOnePostPopup()
           }}
         >
           comments

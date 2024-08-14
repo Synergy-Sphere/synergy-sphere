@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import {
@@ -11,50 +11,50 @@ import {
 } from "./views";
 
 import { useAuthContext } from "./contexts/authContext/AuthContext";
-import { useState } from "react";
+
 import CreateEvent from "./views/CreateEvent";
 import SinglePageEvent from "./views/SinglePageEvent";
+
 import CheckoutForm from "./components/stripe/CheckoutForm";
 import Return from "./components/stripe/Return";
 
+import { useRegisterContext } from "./contexts/registerContext/RegisterContext";
+
+
 function App() {
-  const [canNavToFeed, setCanNavToFeed] = useState(false);
   const { loggedInUser } = useAuthContext();
+  const { toCustomizeProfile } = useRegisterContext();
+
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Login setCanNavToFeed={setCanNavToFeed} />} />
-        <Route path="/signup" element={<Signup />} />
-        {loggedInUser && (
+      {!loggedInUser ? (
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      ) : toCustomizeProfile ? (
+        <Routes>
           <Route
-            path="/:id/customize-profile"
-            element={<CustomizeProfile setCanNavToFeed={setCanNavToFeed} />}
+            path="/signup/customize-profile"
+            element={<CustomizeProfile />}
           />
-        )}
-        {loggedInUser && (
-          <Route path="/:id/feed" element={<FeedLayout />}>
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path="/" element={<FeedLayout />}>
             <Route index element={<Feed />} />
             <Route path=":username" element={<UserProfile />} />
 
-            <Route
-              path="/:id/feed/:username/createEvent"
-              element={<CreateEvent />}
-            />
-
-            <Route
-              path="/:id/feed/event/:eventId"
-              element={<SinglePageEvent />}
-            />
-            <Route
-              path="/:id/feed/:username/event/:eventId"
-              element={<SinglePageEvent />}
-            />
-
+            <Route path="createEvent" element={<CreateEvent />} />
+            <Route path="event/:eventId" element={<SinglePageEvent />} />
+            <Route path="/:eventId/checkout" element={<CheckoutForm />}/>
+            <Route path="/:eventId/return" element={<Return />}/>
+            <Route path="*" element={<Navigate to="/" />} />
           </Route>
-        )}
-        <Route path="/:eventId/checkout" element={<CheckoutForm />}/>
-        <Route path="/:eventId/return" element={<Return />}/>
-      </Routes>
+        </Routes>
+      )}
+
+
       <Toaster />
     </>
   );

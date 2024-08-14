@@ -3,9 +3,14 @@ import useEvent from "../../../hooks/useEvent";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import OneEvent from "./OneEvent";
+import { useAuthContext } from "../../../contexts/authContext/AuthContext";
 
 function EventsComponent({ isOwner, feedView }) {
-  const { id: loggedInUserId, username } = useParams();
+  const { username } = useParams();
+  // Get the id from useAuthContext to pass it to functions
+  const {
+    loggedInUser: { _id: loggedInUserId },
+  } = useAuthContext();
 
   const {
     allEvents,
@@ -17,7 +22,8 @@ function EventsComponent({ isOwner, feedView }) {
     GET_SUGGESTED_EVENTS,
   } = useEventContext();
 
-  const { getAllEvents, getUserEvents, getSuggestedEvents, deleteEvent } = useEvent();
+  const { getAllEvents, getUserEvents, getSuggestedEvents, deleteEvent } =
+    useEvent();
 
   useEffect(() => {
     async function renderAllEvents() {
