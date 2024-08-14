@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import {
@@ -11,37 +11,41 @@ import {
 } from "./views";
 
 import { useAuthContext } from "./contexts/authContext/AuthContext";
-import { useState } from "react";
+
 import CreateEvent from "./views/CreateEvent";
 import SinglePageEvent from "./views/SinglePageEvent";
-
+import { useRegisterContext } from "./contexts/registerContext/RegisterContext";
 
 function App() {
-  const [canNavToFeed, setCanNavToFeed] = useState(false);
   const { loggedInUser } = useAuthContext();
+  const { toCustomizeProfile } = useRegisterContext();
+
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Login setCanNavToFeed={setCanNavToFeed} />} />
-        <Route path="/signup" element={<Signup />} />
-        {loggedInUser && (
+      {!loggedInUser ? (
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      ) : toCustomizeProfile ? (
+        <Routes>
           <Route
-            path="/:id/customize-profile"
-            element={<CustomizeProfile setCanNavToFeed={setCanNavToFeed} />}
+            path="/signup/customize-profile"
+            element={<CustomizeProfile />}
           />
-        )}
-        {loggedInUser && (
-          <Route path="/:id/feed" element={<FeedLayout />}>
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path="/" element={<FeedLayout />}>
             <Route index element={<Feed />} />
             <Route path=":username" element={<UserProfile />} />
-
             <Route path="createEvent" element={<CreateEvent />} />
             <Route path="event/:eventId" element={<SinglePageEvent />} />
-
-            <Route />
+            <Route path="*" element={<Navigate to="/" />} />
           </Route>
-        )}
-      </Routes>
+        </Routes>
+      )}
+
       <Toaster />
     </>
   );

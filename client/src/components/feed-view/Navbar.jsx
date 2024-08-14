@@ -12,17 +12,28 @@ function Navbar() {
   const { loggedInUser, updateUser } = useAuthContext();
   const { id } = useParams();
 
+  // ! Try to fix the nav
+  // * worked -- nav to the the logged in user profile
+
   function handleLogout() {
     updateUser(null);
     nav("/");
   }
 
   return (
-    <nav className="w-full mt-4 mb-8">
-      <ul className="flex justify-between items-center gap-10 w-[80em] mx-auto">
+    <nav className="w-full mt-4 mb-8 flex justify-between items-center">
+      <Link
+        // to={`/${id}/feed`}
+        to="/"
+        className="ml-8 text-2xl text-blue-600"
+      >
+        Synergy Sphere
+      </Link>
+      <ul className="flex justify-between items-center gap-10 w-[50%] mr-8">
         <li>
           <Link
-            to={`/${id}/feed/${loggedInUser.username}`}
+            // to={`/${id}/feed/${loggedInUser.username}`}
+            to={`${loggedInUser.username}`}
             className="flex justify-center items-center gap-6"
           >
             <Avatar

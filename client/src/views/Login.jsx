@@ -21,48 +21,54 @@ function Login() {
 
   return (
     <>
-      <div className="w-[80%] mx-auto my-20">
-        <form
-          onSubmit={handleLogin}
-          className="flex flex-col justify-center items-start gap-4"
-        >
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="text"
-            placeholder="Enter your Email"
-            className="input input-bordered w-full max-w-xs"
-            value={email}
-            onChange={({ target }) =>
-              registerDispatch({
-                type: LOGIN_EMAIL_INPUT,
-                payload: target.value,
-              })
-            }
-          />
+      <div className="w-full bg-gray-500 h-[100vh] flex justify-center items-center">
+        <div className="w-[90%] h-[75%] mx-auto bg-white rounded-3xl">
+          <form
+            onSubmit={handleLogin}
+            className="flex flex-col justify-center items-center gap-8 p-8 "
+          >
+            <h2 className="text-2xl font-bold font-montserrat">Welcome Back</h2>
+            <div className=" font-palanquin text-lg flex flex-col gap-4">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="text"
+                placeholder="Enter your Email"
+                className="input input-bordered w-full max-w-xs bg-slate-100 focus:outline-none border-none"
+                value={email}
+                onChange={({ target }) =>
+                  registerDispatch({
+                    type: LOGIN_EMAIL_INPUT,
+                    payload: target.value,
+                  })
+                }
+              />
+            </div>
+            <div className=" font-palanquin text-lg flex flex-col gap-4">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                className="input input-bordered w-full max-w-xs  bg-slate-100 focus:outline-none border-none"
+                value={password}
+                onChange={({ target }) =>
+                  registerDispatch({
+                    type: LOGIN_PASSWORD_INPUT,
+                    payload: target.value,
+                  })
+                }
+              />
+            </div>
 
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Enter your password"
-            className="input input-bordered w-full max-w-xs"
-            value={password}
-            onChange={({ target }) =>
-              registerDispatch({
-                type: LOGIN_PASSWORD_INPUT,
-                payload: target.value,
-              })
-            }
-          />
-
-          <button type="submit" className="btn">
-            Login
-          </button>
-          <Link to="/signup" className="btn-link mt-7">
-            Sign up
-          </Link>
-        </form>
+            <button type="submit" className="btn w-full bg-hehe text-white">
+              Login
+            </button>
+            <Link to="/signup" className="btn-link mt-7">
+              Don't have an account?
+            </Link>
+          </form>
+        </div>
       </div>
     </>
   );
