@@ -4,11 +4,14 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { useAuthContext } from "../contexts/authContext/AuthContext";
+import { useRegisterContext } from "../contexts/registerContext/RegisterContext";
 
 function useSignup() {
   const [loading, setLoading] = useState(false);
 
   const { updateUser } = useAuthContext();
+  const { registerDispatch, toCustomizeProfile, REGISTER_TYPES } =
+    useRegisterContext();
 
   const nav = useNavigate();
 
@@ -55,8 +58,14 @@ function useSignup() {
       const data = await response.json();
       await updateUser(data);
 
-      const userId = data._id;
-      nav(`/${userId}/customize-profile`);
+      // const userId = data._id;
+      // nav(`/${userId}/customize-profile`);
+
+      registerDispatch({
+        type: REGISTER_TYPES.TO_CUSTOMIZE_PROFILE,
+        payload: true,
+      });
+      nav("/signup/customize-profile");
     } catch (error) {
       toast.error(error.message);
     } finally {

@@ -75,6 +75,10 @@ function PostsComponent({ isOwner, feedView }) {
                   isOwner={isOwner}
                   deletePost={deletePost}
                   getUserPosts={getUserPosts}
+
+                  // ! Try
+                  getOnePost={getOnePost}
+
                 />
               );
             })

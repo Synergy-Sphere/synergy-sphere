@@ -7,6 +7,8 @@ export const REGISTER_TYPES = {
 
   LOGIN_EMAIL_INPUT: "login-email",
   LOGIN_PASSWORD_INPUT: "login-password",
+
+  TO_CUSTOMIZE_PROFILE: "to-customize-profile",
 };
 
 export const registerInitialState = {
@@ -19,6 +21,8 @@ export const registerInitialState = {
   },
 
   loginInfo: { email: "", password: "" },
+
+  toCustomizeProfile: false,
 };
 
 export function registerReducer(registerState, { type, payload }) {
@@ -71,6 +75,13 @@ export function registerReducer(registerState, { type, payload }) {
       return {
         ...registerState,
         loginInfo: { ...registerState.loginInfo, password: payload },
+      };
+    }
+
+    case REGISTER_TYPES.TO_CUSTOMIZE_PROFILE: {
+      return {
+        ...registerState,
+        toCustomizeProfile: payload,
       };
     }
     default: {
