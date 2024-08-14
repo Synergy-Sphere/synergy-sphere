@@ -1,69 +1,109 @@
 import { useEffect, useState } from "react";
 import { profileAvatar } from "../assets";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEvent } from "../hooks";
+import { useEventContext } from "../contexts/eventContext/EventContext";
+import { useAuthContext } from "../contexts/authContext/AuthContext";
 
-const SinglePageEvent = () => {
-  const [singleEventInfo, setSingleEventInfo] = useState(null);
+const SinglePageEvent = ({isOwner}) => {
+  const nav = useNavigate();
+  const { eventId } = useParams();
 
-  const {eventId} = useParams();
+  
+  const { getSingleEvent, joinEvent, declineEvent } = useEvent();
+  const { singleEvent, eventDispatch } = useEventContext();
+  const { loggedInUser } = useAuthContext();
+  const [quantityOfTickets, setQuantityOfTickets] = useState("");
+
+
+  const isEventOwner = loggedInUser._id === singleEvent?.createdBy._id;
+
+  console.log(isEventOwner);
+  
+
+  const isParticipant = singleEvent?.participants?.find(
+    (participant) => participant._id === loggedInUser._id
+  );
 
   useEffect(() => {
-    async function getSingleEvent() {
-      const response = await fetch(`http://localhost:5555/event/${eventId}`, {
-        credentials: "include",
-      });
-      if (!response.ok) {
-        const { error } = await response.json();
-        throw new Error(error.message);
-      }
-
-      const data = await response.json();
-      console.log(data);
-      setSingleEventInfo(data);
+    async function renderSingleEvent() {
+      await getSingleEvent(eventId);
     }
-    getSingleEvent();
+    renderSingleEvent();
   }, []);
 
+  console.log(singleEvent);
+
   return (
-    <div>
+    <div className="flex flex-col items-center gap-6">
       <div>
-        <p>{singleEventInfo?.title}</p>
+        <p>{singleEvent?.title}</p>
         <div>
           <img
-            src={singleEventInfo?.createdBy.profilePic || profileAvatar}
+            src={singleEvent?.createdBy.profilePic || profileAvatar}
             alt=""
             className="w-8 h-8 rounded-full"
           />
           <div>
             <p>Hosted By</p>
-            <p>{singleEventInfo?.createdBy.fullName}</p>
+            <p>{singleEvent?.createdBy.fullName}</p>
           </div>
         </div>
       </div>
       <div>
         {/* <img src="" alt="" /> */}
         <p>Description</p>
-        <p>{singleEventInfo?.description}</p>
+        <p>{singleEvent?.description}</p>
       </div>
-      <div>{singleEventInfo?.eventType.map((type, i) => (
-        <span>{type}</span>
-      ))}</div>
       <div>
-        Attendees ({singleEventInfo?.participants.length})
-        {singleEventInfo?.participants && singleEventInfo?.participants.map(participant => (
+        {singleEvent?.eventType.map((type, i) => (
+          <span key={i}>{type}</span>
+        ))}
+      </div>
+      <div>
+        Attendees ({singleEvent?.participants?.length})
+        {singleEvent?.participants &&
+          singleEvent?.participants?.map((participant) => (
             <div>
-                <img src={participant.profilePic || profileAvatar} alt="" />
-                <p>{participant.fullName}</p>
+              <img
+                src={participant.profilePic || profileAvatar}
+                alt=""
+                className="w-10"
+              />
+              <p>{participant.fullName}</p>
             </div>
-        ) )}
-        </div>
+          ))}
+      </div>
+      <div>
         <div>
-            <div>
-                <p>{singleEventInfo?.startDate}</p>
-                <p>{singleEventInfo?.title}</p>
-            </div>
-            <button>Attend</button>
+          <p>{singleEvent?.startDate}</p>
+          <p>{singleEvent?.title}</p>
         </div>
+         {isParticipant && !isEventOwner && !singleEvent?.isPaid ? (
+          <button onClick={() => declineEvent(eventId)}>Decline</button>
+        ) : singleEvent?.isPaid && !isEventOwner && !isParticipant ? (
+          <div>
+            Please note this event is paid.
+            {/* <input
+              type="text"
+              placeholder="Number of tickets..."
+              value={quantityOfTickets}
+              onChange={(e) => setQuantityOfTickets(e.target.value)}
+            /> */}
+            <button
+              onClick={() =>
+                nav(`/${eventId}/checkout`, {
+                  state: { eventId },
+                })
+              }
+            >
+              Confirm
+            </button>
+          </div>
+        ) : !isEventOwner && !isParticipant ? (
+          <button onClick={() => joinEvent(eventId)}>Attend</button>
+        ) : null}
+      </div>
     </div>
   );
 };

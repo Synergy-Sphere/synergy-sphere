@@ -47,7 +47,7 @@ function EventsComponent({ isOwner, feedView }) {
   return (
     <>
       <h3 className=" text-2xl text-center uppercase ">Events</h3>
-      <Link to={`createEvent`}>Create Event</Link>
+     {isOwner && <Link to={`createEvent`}>Create Event</Link>}
       <div className="flex flex-wrap justify-around items-center">
         {username
           ? oneUserEvents &&

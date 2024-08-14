@@ -14,6 +14,7 @@ function EventContextProvider({ children }) {
     eventInitialState
   );
 
+  console.log(eventState.singleEvent);
   return (
     <EventContext.Provider
       value={{ ...eventState, ...EVENT_TYPES, eventDispatch }}

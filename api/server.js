@@ -13,6 +13,7 @@ import eventRouter from "./routes/event.route.js";
 import postRouter from "./routes/post.route.js";
 
 import commentRouter from "./routes/comment.route.js";
+import bookingRouter from "./routes/booking.route.js";
 
 await connect();
 
@@ -21,6 +22,7 @@ const app = express();
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(cookieParser());
 app.use(express.json());
+// app.use(express.static('public'));
 
 // Routes
 
@@ -33,6 +35,7 @@ app.use("/event", eventRouter);
 app.use("/post", postRouter);
 app.use("/comment", commentRouter);
 app.use("/refresh-token", refreshTokenRouter);
+app.use("/booking", bookingRouter);
 
 const port = process.env.PORT || 5555;
 

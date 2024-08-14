@@ -14,7 +14,8 @@ import { useAuthContext } from "./contexts/authContext/AuthContext";
 import { useState } from "react";
 import CreateEvent from "./views/CreateEvent";
 import SinglePageEvent from "./views/SinglePageEvent";
-
+import CheckoutForm from "./components/stripe/CheckoutForm";
+import Return from "./components/stripe/Return";
 
 function App() {
   const [canNavToFeed, setCanNavToFeed] = useState(false);
@@ -35,12 +36,24 @@ function App() {
             <Route index element={<Feed />} />
             <Route path=":username" element={<UserProfile />} />
 
-            <Route path="createEvent" element={<CreateEvent />} />
-            <Route path="event/:eventId" element={<SinglePageEvent />} />
+            <Route
+              path="/:id/feed/:username/createEvent"
+              element={<CreateEvent />}
+            />
 
-            <Route />
+            <Route
+              path="/:id/feed/event/:eventId"
+              element={<SinglePageEvent />}
+            />
+            <Route
+              path="/:id/feed/:username/event/:eventId"
+              element={<SinglePageEvent />}
+            />
+
           </Route>
         )}
+        <Route path="/:eventId/checkout" element={<CheckoutForm />}/>
+        <Route path="/:eventId/return" element={<Return />}/>
       </Routes>
       <Toaster />
     </>

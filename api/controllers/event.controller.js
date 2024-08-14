@@ -1,6 +1,7 @@
 import createError from "http-errors";
 import Event from "../models/Event.model.js";
 import User from "../models/User.model.js";
+import Ticket from "../models/Ticket.model.js";
 
 export const createEvent = async (req, res, next) => {
   const tokenUserId = req.user.id;
@@ -13,6 +14,7 @@ export const createEvent = async (req, res, next) => {
     endDate,
     location,
     isPaid,
+    tickets,
   } = req.body;
 
   let foundUser;
@@ -27,29 +29,67 @@ export const createEvent = async (req, res, next) => {
     return next(createError(403, "Not authorized"));
   } else {
     try {
-      const newEvent = await Event.create({
-        title,
-        description,
-        eventType,
-        startDate,
-        endDate,
-        location,
-        isPaid,
-        createdBy: foundUser._id,
-      });
+      if (isPaid) {
+        const newEvent = await Event.create({
+          title,
+          description,
+          eventType,
+          startDate,
+          endDate,
+          location,
+          isPaid,
+          createdBy: foundUser._id,
+        });
 
-      // await newEvent.populate("createdBy", {
-      //   _id: 1,
-      //   username: 1,
-      //   email: 1,
-      // });
+        const { quantity, price } = tickets;
 
-      await User.findByIdAndUpdate(tokenUserId, {
-        $push: { events: newEvent._id },
-      });
+        let updatedEvent;
 
-      res.status(200).json(newEvent);
-    } catch {
+        for (let i = 0; i < quantity; i++) {
+          const newTicket = await Ticket.create({
+            price,
+            offeredBy: tokenUserId,
+            forEvent: newEvent._id,
+          });
+
+          updatedEvent = await Event.findByIdAndUpdate(newEvent._id, {
+            $push: { tickets: newTicket._id },
+          });
+        }
+
+        await User.findByIdAndUpdate(tokenUserId, {
+          $push: { events: updatedEvent._id },
+        });
+
+        await updatedEvent.populate("tickets");
+
+        res.status(200).json(updatedEvent);
+      } else {
+        const newEvent = await Event.create({
+          title,
+          description,
+          eventType,
+          startDate,
+          endDate,
+          location,
+          isPaid,
+          createdBy: foundUser._id,
+        });
+
+        // await newEvent.populate("createdBy", {
+        //   _id: 1,
+        //   username: 1,
+        //   email: 1,
+        // });
+
+        await User.findByIdAndUpdate(tokenUserId, {
+          $push: { events: newEvent._id },
+        });
+
+        res.status(200).json(newEvent);
+      }
+    } catch (err) {
+      console.log(err);
       next(createError(500, "Server error"));
     }
   }
@@ -273,7 +313,7 @@ export async function getAllEvents(req, res, next) {
           await x.populate("createdBy", {
             fullName: 1,
             profilePic: 1,
-            _id:0
+            _id: 0,
           });
 
           // await x.populate("likes", { fullName: 1, _id: 0 });
@@ -319,7 +359,7 @@ export async function getSuggestedEvents(req, res, next) {
     const foundUser = await User.findById(id);
     // console.log(foundUser);
     const suggestedEvents = await Event.find({
-      eventType: { $elemMatch: { $in: foundUser.interests } }
+      eventType: { $elemMatch: { $in: foundUser.interests } },
     });
 
     res.json(suggestedEvents);
@@ -328,15 +368,20 @@ export async function getSuggestedEvents(req, res, next) {
   }
 }
 
-export async function getSingleEvent(req,res,next) {
-  const {eventId} = req.params;
+export async function getSingleEvent(req, res, next) {
+  const { eventId } = req.params;
   console.log(eventId);
   try {
     const foundEvent = await Event.findById(eventId);
-    foundEvent.populate("createdBy", {
-      fullName:1,
-      username:1,
-      profilePic:1
+    await foundEvent.populate("createdBy", {
+      fullName: 1,
+      username: 1,
+      profilePic: 1,
+    });
+    await foundEvent.populate("participants", {
+      fullName: 1,
+      username: 1,
+      profilePic: 1,
     })
     res.json(foundEvent);
   } catch (error) {
