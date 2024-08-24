@@ -45,18 +45,24 @@ export const createEvent = async (req, res, next) => {
 
         let updatedEvent;
 
-        for (let i = 0; i < quantity; i++) {
-          const newTicket = await Ticket.create({
-            price,
-            offeredBy: tokenUserId,
-            forEvent: newEvent._id,
-          });
-
-          updatedEvent = await Event.findByIdAndUpdate(newEvent._id, {
-            $push: { tickets: newTicket._id },
-          });
+        if (quantity === "0") {
+          updatedEvent = await Event.findById(newEvent._id)
+        } else {
+          for (let i = 0; i < quantity; i++) {
+            const newTicket = await Ticket.create({
+              price,
+              offeredBy: tokenUserId,
+              forEvent: newEvent._id,
+            });
+  
+            updatedEvent = await Event.findByIdAndUpdate(newEvent._id, {
+              $push: { tickets: newTicket._id },
+            });
+          }
         }
 
+        console.log(updatedEvent);
+        
         await User.findByIdAndUpdate(tokenUserId, {
           $push: { events: updatedEvent._id },
         });

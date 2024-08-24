@@ -93,7 +93,7 @@ const CreateEvent = () => {
 
       const data = await response.json();
       console.log(data);
-      nav(`/${loggedInUser._id}/feed/${loggedInUser.username}`);
+      nav(`/${loggedInUser.username}`);
     } catch (error) {
       console.log(error.message);
     }

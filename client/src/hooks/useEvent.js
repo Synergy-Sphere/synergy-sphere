@@ -118,7 +118,7 @@ function useEvent() {
       eventDispatch({ type: GET_SINGLE_EVENT, payload: data });
       // toast.success(message);
     } catch (error) {
-      toast.error(error.message);
+      console.log(error.message);
     }
   }
 
