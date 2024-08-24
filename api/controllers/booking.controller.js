@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import Event from "../models/Event.model.js";
 import Ticket from "../models/Ticket.model.js";
 import User from "../models/User.model.js";
-
+import mongoose from "mongoose";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const YOUR_DOMAIN = "http://localhost:5173";
@@ -23,33 +23,35 @@ export const createCheckoutSession = async (req, res) => {
   // const items = [];
 
   // for (let i = 0; i < 1; i++) {
-    const ticket = await Ticket.findOne({
-      forEvent: eventId
-      // _id: { $not: { $in: items.map((item) => item._id) } },
-    });
-    // if (ticket) {
-    //   items.push(ticket);
-    // }
+  const ticket = await Ticket.findOne({
+    forEvent: eventId,
+    // _id: { $not: { $in: items.map((item) => item._id) } },
+  });
+  // if (ticket) {
+  //   items.push(ticket);
+  // }
   // }
 
   // console.log(items);
-
-  const lineItems = [{
-    price_data: {
-      currency: "eur",
-      unit_amount: ticket.price * 100,
-      product_data: {
-        name: `Ticket#${ticket._id}`,
+  const lineItems = [
+    {
+      price_data: {
+        currency: "eur",
+        unit_amount: ticket.price * 100,
+        product_data: {
+          name: `Ticket#${ticket._id}`,
+        },
       },
+      quantity: 1, // assuming each item has a quantity of 1
     },
-    quantity: 1, // assuming each item has a quantity of 1
-  }];
+  ];
 
   const session = await stripe.checkout.sessions.create({
     ui_mode: "embedded",
     line_items: lineItems,
     mode: "payment",
     return_url: `${YOUR_DOMAIN}/${eventId}/return?session_id={CHECKOUT_SESSION_ID}`,
+    // return_url: `${YOUR_DOMAIN}/${eventId}/return`,
     // return_url: `${YOUR_DOMAIN}/${user._id}/feed/${user.username}/event/${eventId}`
   });
 
@@ -65,7 +67,7 @@ export const sessionStatus = async (req, res) => {
     req.query.session_id
   );
 
-  console.log(session);
+  // console.log(session);
   console.log(lineItems);
 
   res.send({
@@ -77,16 +79,14 @@ export const sessionStatus = async (req, res) => {
 
 export const deleteTickets = async (req, res, next) => {
   const { lineItems, eventId } = req.body;
-  const idsOfTickets = lineItems?.map((item) => item.description.split("#")[1]);
-  console.log(idsOfTickets);
+  console.log("this is lineitems in DeleteTickets =>>>",lineItems);
+  
+  const idOfTicket = lineItems[0].description.split("#")[1];
+  console.log(idOfTicket);
   const event = await Event.findById(eventId);
 
-  await Promise.all(
-    idsOfTickets.map(async (id) => {
-      await Ticket.findByIdAndDelete(id);
-    })
-  );
-
+  await Ticket.findByIdAndDelete(idOfTicket);
   // Remove ticket references from Event document
-  await event.updateOne({ $pull: { tickets: { $in: idsOfTickets } } });
+  // await event.updateOne({ $pull: { tickets: { $in: idOfTicket } } });
+  await event.updateOne({ $pull: { tickets: idOfTicket } });
 };

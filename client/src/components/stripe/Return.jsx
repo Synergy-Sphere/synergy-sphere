@@ -55,24 +55,47 @@ const Return = () => {
       credentials: "include",
     });
   }
-  const joinEventMemoized = useCallback(() => joinEvent(eventId), [eventId, joinEvent]);
+
+  const joinEventMemoized = useCallback(() => joinEvent(eventId), [eventId]);
 
   console.log(lineItems);
 
   if (status === "open") {
-    return <Navigate to="/checkout" />;
+    return <Navigate to={`/${eventId}/checkout`} />;
   }
 
+  useEffect(() => {
+    if (status === "complete") {
+      //   toast.success("Payment successful");
+      //   deleteTickets();
+      //   // joinEvent(eventId);
+      //   setTimeout(() => {
+      //     joinEventMemoized();
+      //     nav(`/event/${eventId}`);
+      //   }, 5000);
+      toast.success("Payment successful");
+      deleteTickets();
+      // joinEvent(eventId);
+      setTimeout(() => {
+        joinEventMemoized();
+        nav(`/event/${eventId}`);
+      }, 5000);
+
+      
+
+      // return (
+      //   <section id="success">
+      //     <p>
+      //       We appreciate your business! A confirmation email will be sent to{" "}
+      //       {customerEmail}. If you have any questions, please email{" "}
+      //       <a href="mailto:orders@example.com">orders@example.com</a>.
+      //     </p>
+      //   </section>
+      // );
+    }
+  }, [status, deleteTickets, joinEventMemoized, nav, eventId]);
+
   if (status === "complete") {
-    toast.success("Payment successful");
-    deleteTickets();
-    // joinEvent(eventId);
-    setTimeout(() => {
-      joinEventMemoized();
-      nav(
-        `/${loggedInUser?._id}/feed/${loggedInUser?.username}/event/${eventId}`
-      );
-    }, 5000);
     return (
       <section id="success">
         <p>
