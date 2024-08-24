@@ -11,6 +11,12 @@ import Navbar from "./feed-view/Navbar";
 
 import SwitchPostsEvents from "./feed-view/posts-events-switch/SwitchPostsEvents";
 
+import { StarsCanvas, EarthCanvas } from "./canvas";
+
+import { PixelsEffect } from "./effects";
+
+import Heading from "./Heading";
+
 export {
   LogoutButton,
   SetInterests,
@@ -18,5 +24,9 @@ export {
   SetLocation,
   SuggestedFriends,
   Navbar,
-  SwitchPostsEvents
+  SwitchPostsEvents,
+  StarsCanvas,
+  EarthCanvas,
+  PixelsEffect,
+  Heading,
 };

@@ -5,6 +5,9 @@ import { useParams } from "react-router-dom";
 
 import { useAuthContext } from "../../contexts/authContext/AuthContext";
 
+import toast from "react-hot-toast";
+
+
 const interests = [
   { id: uuidV4(), value: "Sport" },
   { id: uuidV4(), value: "Yoga" },
@@ -34,7 +37,7 @@ const interests = [
   { id: uuidV4(), value: "Animals" },
 ];
 
-function SetInterests({ dispatch, types, userReducerInterests }) {
+function SetInterests({ dispatch, types, userReducerInterests, idParams }) {
   const [userInterests, setUserInterests] = useState([]);
 
   const { loggedInUser, updateUser } = useAuthContext();
@@ -55,7 +58,7 @@ function SetInterests({ dispatch, types, userReducerInterests }) {
         },
       };
       const response = await fetch(
-        `http://localhost:5555/createProfile/${id}/interests`,
+        `http://localhost:5555/createProfile/${idParams}/interests`,
         settings
       );
 
@@ -67,37 +70,43 @@ function SetInterests({ dispatch, types, userReducerInterests }) {
       const data = await response.json();
       // console.log("data--> ", data);
       await updateUser(data);
+      toast.success("Interests added")
+
     } catch (error) {
-      console.error(error.message);
+      toast.error(error.message);
     }
   }
   return (
-    <div className="flex flex-col justify-center items-center">
-      <span className="flex items-center justify-center ">
-        {userInterests.map((x, i) => (
-          <div
-            key={i}
-            className=" m-4 flex gap-2 items-center justify-center border-blue-400"
-          >
-            <span>{x}</span>
-            <button
-              className=" bg-red-200 text-white rounded-full w-4 h-4 flex items-center justify-center"
-              onClick={() => {
-                setUserInterests(userInterests.filter((y) => y !== x));
-              }}
+    <div className="flex flex-col justify-center md:items-start">
+      <span className="flex items-center justify-center   max-w-[100em] overflow-x-auto max-h-[57px]">
+        {userInterests.length > 0 ? (
+          userInterests.map((x, i) => (
+            <div
+              key={i}
+              className=" m-4 flex gap-2 items-center  border-blue-400 min-w-fit" 
             >
-              &times;
-            </button>
-          </div>
-        ))}
+              <span>{x}</span>
+              <button
+                className=" bg-red-200 text-white rounded-full w-4 h-4 flex items-center justify-center"
+                onClick={() => {
+                  setUserInterests(userInterests.filter((y) => y !== x));
+                }}
+              >
+                &times;
+              </button>
+            </div>
+          ))
+        ) : (
+          <div className="h-[56px]"></div>
+        )}
       </span>
 
       <form
         onSubmit={handleSetInterests}
-        className="flex flex-col justify-center items-center"
+        className="flex flex-col justify-center w-full items-start"
       >
         <select
-          className="select select-bordered w-full max-w-xs"
+          className="select select-bordered w-full "
           // value={userInterests}
           onChange={({ target }) =>
             setUserInterests([...userInterests, target.value])
@@ -122,5 +131,3 @@ function SetInterests({ dispatch, types, userReducerInterests }) {
 }
 
 export default SetInterests;
-
-

@@ -47,7 +47,7 @@ function PostsComponent({ isOwner, feedView }) {
 
   return (
     <>
-      <h3 className=" text-2xl text-center uppercase ">Posts</h3>
+      <h3 className="font-bold text-xl md:text-2xl text-center uppercase ">Posts</h3>
 
       {isOwner && (
         <div className="w-[85%] mx-auto mt-8">

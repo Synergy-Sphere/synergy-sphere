@@ -9,6 +9,8 @@ export const REGISTER_TYPES = {
   LOGIN_PASSWORD_INPUT: "login-password",
 
   TO_CUSTOMIZE_PROFILE: "to-customize-profile",
+
+  IS_LOGIN_VIEW: "is-login-view",
 };
 
 export const registerInitialState = {
@@ -23,6 +25,8 @@ export const registerInitialState = {
   loginInfo: { email: "", password: "" },
 
   toCustomizeProfile: false,
+
+  isLoginView: true,
 };
 
 export function registerReducer(registerState, { type, payload }) {
@@ -84,6 +88,14 @@ export function registerReducer(registerState, { type, payload }) {
         toCustomizeProfile: payload,
       };
     }
+
+    case REGISTER_TYPES.IS_LOGIN_VIEW: {
+      return {
+        ...registerState,
+        isLoginView: payload,
+      };
+    }
+
     default: {
       return registerState;
     }

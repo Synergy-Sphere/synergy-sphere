@@ -15,15 +15,15 @@ function Feed() {
         </div>
       )}
       <section
-        className={`w-[90vw] mx-auto 
+        className={`w-full lg:w-[90vw] mx-auto 
         ${commentsPopup && " blur opacity-90"}
         `}
       >
         <main className="flex justify-between">
-          <div className="w-[60%]">
+          <div className="lg:w-[60%]">
             <SwitchPostsEvents feedView={feedView} />
           </div>
-          <div className="w-[20%] h-[80vh] overflow-y-scroll">
+          <div className=" hidden lg:block w-[20%] h-[80vh] overflow-y-scroll">
             <SuggestedFriends />
           </div>
         </main>
