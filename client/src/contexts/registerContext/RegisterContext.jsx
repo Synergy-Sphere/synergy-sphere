@@ -18,15 +18,21 @@ function RegisterContextProvider({ children }) {
     registerInitialState
   );
 
-  const { signupInfo, loginInfo, toCustomizeProfile } = registerState;
+  const { signupInfo, loginInfo, toCustomizeProfile, isLoginView } =
+    registerState;
 
   return (
     <RegisterContext.Provider
       value={{
         signupInfo,
         loginInfo,
+
         registerDispatch,
+
         toCustomizeProfile,
+
+        isLoginView,
+
         REGISTER_TYPES,
       }}
     >

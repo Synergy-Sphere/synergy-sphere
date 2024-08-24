@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Autocomplete, TextField, Box, Container } from "@mui/material";
+import toast from "react-hot-toast";
 
 const countries = [
   { code: "US", label: "United States" },
@@ -87,6 +88,7 @@ function SetLocation({ userLocation, types, updateUser, dispatch, idParams }) {
       const data = await response.json();
 
       await updateUser(data);
+      toast.success("location added")
     } catch (error) {
       console.error(error.message);
     }
@@ -94,10 +96,9 @@ function SetLocation({ userLocation, types, updateUser, dispatch, idParams }) {
 
   return (
     <>
-      <div>
-        <p className=" text-2xl font-bold">{userLocation}</p>
-      </div>
-      <Container>
+      <div className="flex flex-col md:items-start w-[60]">
+      
+      <Container >
         <Box component="form" sx={{ mt: 1 }}>
           {/* <Autocomplete
             options={countries}
@@ -116,6 +117,8 @@ function SetLocation({ userLocation, types, updateUser, dispatch, idParams }) {
           {/* {selectedCountry && ()} */}
           <Autocomplete
             //   options={cities[selectedCountry.code] || []}
+            // sx={{ marginBlock: "-24px" }}
+            sx={{ marginInline: "-20px" }}
             options={cities["DE"] || []}
             getOptionLabel={(option) => option}
             value={userLocation}
@@ -123,7 +126,7 @@ function SetLocation({ userLocation, types, updateUser, dispatch, idParams }) {
               dispatch({ type: types, payload: newValue });
             }}
             renderInput={(params) => (
-              <TextField {...params} label="City" variant="outlined" />
+              <TextField {...params} label="City" variant="outlined" sx={{ margin: 0 }} />
             )}
           />
         </Box>
@@ -131,6 +134,9 @@ function SetLocation({ userLocation, types, updateUser, dispatch, idParams }) {
       <button onClick={handleSetLocation} className="btn m-3">
         Add your location
       </button>
+
+      </div>
+
     </>
   );
 }
