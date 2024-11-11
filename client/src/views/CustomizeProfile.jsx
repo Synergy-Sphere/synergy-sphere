@@ -45,6 +45,7 @@ function CustomizeProfile() {
           userDispatch={userDispatch}
           types={SET_USER_PROFILE_PIC}
           updateUser={updateUser}
+          loggedInUserId={id}
         />
       </div>
 

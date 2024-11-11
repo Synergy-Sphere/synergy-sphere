@@ -11,10 +11,10 @@ function UploadWidget({
   types,
   userProfilePic,
   updateUser,
+  loggedInUserId
 }) {
   const [loaded, setLoaded] = useState(false);
-
-  const { id } = useParams();
+  
 
   async function setProfilePic() {
     try {
@@ -27,7 +27,7 @@ function UploadWidget({
         },
       };
       const response = await fetch(
-        `http://localhost:5555/createProfile/${id}/profilePicture`,
+        `http://localhost:5555/createProfile/${loggedInUserId}/profilePicture`,
         settings
       );
 

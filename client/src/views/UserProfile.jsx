@@ -46,10 +46,10 @@ function UserProfile() {
     }
     getUserInfo();
     window.scrollTo(0, 0);
-    // herr Bakumenko added username
+    
   }, [username]);
 
-  console.log("visited user info -->", userInfo);
+  // console.log("visited user info -->", userInfo);
   return (
     <>
       {commentsPopup && (

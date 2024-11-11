@@ -6,9 +6,14 @@ import {
 } from "@stripe/react-stripe-js";
 import { useLocation } from "react-router-dom";
 
+// const stripePromise = loadStripe(
+//   "pk_test_51PmgjWIou5sdoDC5ZTrLCO0XFCKKRX9NtsWxoru37J6RVDEirIb87WwaSWspEIT9CyNsfI1ikAyZVyEmH247mYCN009Jqwf8pB"
+// );
+
 const stripePromise = loadStripe(
-  "pk_test_51PmgjWIou5sdoDC5ZTrLCO0XFCKKRX9NtsWxoru37J6RVDEirIb87WwaSWspEIT9CyNsfI1ikAyZVyEmH247mYCN009Jqwf8pB"
+  "pk_test_51PrPtT2LyFfMxgY9nD7VXeTJDvZd8DXeGRaZd38mEmAmfnFobIGao61OVIFpNI0YkynCmMgSdvj9ogUMxVmbu3ZB007BnRWgFb"
 );
+
 
 const CheckoutForm = () => {
   const { state } = useLocation();

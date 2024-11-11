@@ -32,11 +32,12 @@ function Navbar() {
               alt=""
               src={loggedInUser.profilePic}
               // sx={{ width: 56, height: 56 }}
-            /> */}
+            /> 
+            */}
             <img
               src={loggedInUser.profilePic || profileAvatar}
               alt=""
-              className="w-6 lg:w-14 h-6 lg:h-14"
+              className="w-6 lg:w-16 h-6 lg:h-16  rounded-full object-cover "
             />
             <span>{loggedInUser.fullName}</span>
           </Link>

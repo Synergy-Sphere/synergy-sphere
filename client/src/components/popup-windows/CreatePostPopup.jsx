@@ -3,10 +3,13 @@ import { profileAvatar } from "../../assets";
 import { usePostContext } from "../../contexts/postContext/PostContext";
 
 import { usePost } from "../../hooks";
+import { useAuthContext } from "../../contexts/authContext/AuthContext";
 
 function CreatePostPopup() {
   const { content, TEXT_AREA, postDispatch, SHOW_CREATE_POST_POPUP } =
     usePostContext();
+
+    const { loggedInUser } = useAuthContext()
 
   const { createPost } = usePost();
 
@@ -34,8 +37,8 @@ function CreatePostPopup() {
         </div>
 
         <div className=" flex justify-start items-center m-4 gap-4">
-          <img src={profileAvatar} alt="" className=" w-12 h-12 rounded-full" />
-          <span>auth user</span>
+          <img src={loggedInUser.profilePic} alt="" className=" w-12 h-12 rounded-full" />
+          <span>{loggedInUser.fullName}</span>
         </div>
 
         <form

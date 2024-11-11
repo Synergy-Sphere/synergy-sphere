@@ -21,7 +21,9 @@ export default {
         "slate-gray": "#6D6D6D",
         "pale-blue": "#F5F6FF",
         "white-400": "rgba(255, 255, 255, 0.80)",
-        "hehe": "#2C54CC"
+        "hehe": "#2C54CC",
+        "main-pink" : "#ECCCBD",
+        "main-dark-blue": "#1F2645"
       },
       fontFamily: {
         palanquin: ["Palanquin", "sans-serif"],
@@ -31,3 +33,6 @@ export default {
   },
   plugins: [require("daisyui")],
 };
+
+
+/* https://nicepage.com/ht/6152200/our-professional-team-of-therapists-html-template */

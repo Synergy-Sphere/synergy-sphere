@@ -9,16 +9,16 @@ const YOUR_DOMAIN = "http://localhost:5173";
 
 export const createCheckoutSession = async (req, res) => {
   console.log("checkout session called");
-  console.log(req.body);
+  // console.log(req.body);
   const tokenUserId = req.user;
-  console.log(req.user);
+  // console.log(req.user);
 
   const user = await User.findById(tokenUserId);
 
   const { eventId } = req.body;
 
   // console.log(quantity);
-  console.log(eventId);
+  // console.log(eventId);
 
   // const items = [];
 
@@ -55,7 +55,7 @@ export const createCheckoutSession = async (req, res) => {
     // return_url: `${YOUR_DOMAIN}/${user._id}/feed/${user.username}/event/${eventId}`
   });
 
-  console.log(session);
+  // console.log(session);
 
   res.send({ clientSecret: session.client_secret });
 };
@@ -68,7 +68,7 @@ export const sessionStatus = async (req, res) => {
   );
 
   // console.log(session);
-  console.log(lineItems);
+  // console.log(lineItems);
 
   res.send({
     status: session.status,
@@ -79,10 +79,10 @@ export const sessionStatus = async (req, res) => {
 
 export const deleteTickets = async (req, res, next) => {
   const { lineItems, eventId } = req.body;
-  console.log("this is lineitems in DeleteTickets =>>>",lineItems);
+  // console.log("this is lineitems in DeleteTickets =>>>",lineItems);
   
   const idOfTicket = lineItems[0].description.split("#")[1];
-  console.log(idOfTicket);
+  // console.log(idOfTicket);
   const event = await Event.findById(eventId);
 
   await Ticket.findByIdAndDelete(idOfTicket);

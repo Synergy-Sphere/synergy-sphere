@@ -37,7 +37,7 @@ function PostsComponent({ isOwner, feedView }) {
 
       postDispatch({ type: ONE_USER_POSTS, payload: null });
     };
-        // herr Bakumenko added username
+    // herr Bakumenko added username
   }, [showPopup, username]);
 
   // console.log("one user's posts --> ", oneUserPosts);
@@ -47,7 +47,9 @@ function PostsComponent({ isOwner, feedView }) {
 
   return (
     <>
-      <h3 className="font-bold text-xl md:text-2xl text-center uppercase ">Posts</h3>
+      <h3 className="font-bold text-xl md:text-2xl text-center uppercase ">
+        Posts
+      </h3>
 
       {isOwner && (
         <div className="w-[85%] mx-auto mt-8">
@@ -65,36 +67,51 @@ function PostsComponent({ isOwner, feedView }) {
       <div className="flex flex-col items-center">
         {username
           ? oneUserPosts &&
-            oneUserPosts.map((x) => {
-              return (
-                <OnePost
-                  {...x}
-                  key={x._id}
-                  username={username}
-                  giveLike={giveLike}
-                  isOwner={isOwner}
-                  deletePost={deletePost}
-                  getUserPosts={getUserPosts}
+            oneUserPosts
+              .sort((a, b) => {
+                const earlyPost = new Date(a.createdAt).getTime();
 
-                  // ! Try
-                  getOnePost={getOnePost}
-
-                />
-              );
-            })
+                const latePost = new Date(b.createdAt).getTime();
+                if (earlyPost > latePost) return -1;
+                else if (earlyPost < latePost) return 1;
+                else return 0;
+              })
+              .map((x) => {
+                return (
+                  <OnePost
+                    {...x}
+                    key={x._id}
+                    username={username}
+                    giveLike={giveLike}
+                    isOwner={isOwner}
+                    deletePost={deletePost}
+                    getUserPosts={getUserPosts}
+                    // ! Try
+                    getOnePost={getOnePost}
+                  />
+                );
+              })
           : allPosts &&
-            allPosts.map((x) => {
-              return (
-                <OnePost
-                  {...x}
-                  key={x._id}
-                  giveLike={giveLike}
-                  feedView={feedView}
+            allPosts
+              .sort((a, b) => {
+                const earlyPost = new Date(a.createdAt).getTime();
 
-                  getOnePost={getOnePost}
-                />
-              );
-            })}
+                const latePost = new Date(b.createdAt).getTime();
+                if (earlyPost > latePost) return -1;
+                else if (earlyPost < latePost) return 1;
+                else return 0;
+              })
+              .map((x) => {
+                return (
+                  <OnePost
+                    {...x}
+                    key={x._id}
+                    giveLike={giveLike}
+                    feedView={feedView}
+                    getOnePost={getOnePost}
+                  />
+                );
+              })}
       </div>
     </>
   );
